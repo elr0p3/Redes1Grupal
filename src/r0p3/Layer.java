@@ -1,9 +1,13 @@
 package r0p3;
 
-public abstract class Layer extends Thread {
+public class Layer extends Thread {
     
-    public abstract void configuration();
+    public void configuration() {
+
+    }
 
     @Override
-    public abstract void run();
+    public void run() {
+
+    }
 }
