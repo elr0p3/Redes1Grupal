@@ -1,4 +1,5 @@
 package r0p3;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import jpcap.*;
 
@@ -8,29 +9,30 @@ public class Physical extends Layer {
     
     @Override
     public void configuration() {
-        //Obtain the list of network interfaces
+        Scanner scan = new Scanner(System.in);
+        boolean done = false;
+
         NetworkInterface[] devices = JpcapCaptor.getDeviceList();
 
-        //for each network interface
-        for (int i = 0; i < devices.length; i++) {
-            //print out its name and description
+        for (int i = 0; i < devices.length; i++)
             System.out.println(i+": "+devices[i].name + "(" + devices[i].description+")");
-        }
 
-        System.out.print("Introduce the interface to use: ");
-        System.out.flush();
-        Scanner scan = new Scanner(System.in);
-        while (!scan.hasNextInt()) {
-            System.err.println("Input an integer pls!"); 
-            System.out.print("Interface: ");
-            System.out.flush();
-            scan.nextLine();
-            if (scan.hasNextInt()) {
-                interfaceSelect = scan.nextInt();
-                if (interfaceSelect < 0|| devices.length < interfaceSelect)
-                    continue;
-            }
-        }
+        do {
+          try {
+				System.out.print("Introduce the interface to use: ");
+                System.out.flush();
+				interfaceSelect = scan.nextInt();
+                if (0 <= interfaceSelect && interfaceSelect < devices.length)
+                    done = true;
+                else
+                    System.err.println("ERROR! Number out of range");
+            } catch (InputMismatchException e) {
+		        System.err.println("ERROR! Invalid integer input");
+                scan = new Scanner(System.in);
+		    }
+        } while (done == false);
+
+        scan.close();
     }
 
     @Override
