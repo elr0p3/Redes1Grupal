@@ -33,19 +33,19 @@ public class Physical extends Layer {
                     '(' + devices[i].description + ')');
 
         do {
-          try {
-				System.out.print("Introduce the interface to use: ");
+            try {
+                System.out.print("Introduce the interface to use: ");
                 System.out.flush();
-				interfaceSelect = scan.nextInt();
+                interfaceSelect = scan.nextInt();
                 if (0 <= interfaceSelect && interfaceSelect < devices.length)
                     done = true;
                 else
                     System.err.println("ERROR! Number out of range");
             } catch (InputMismatchException e) {
-		        System.err.println("ERROR! Invalid integer input");
+                System.err.println("ERROR! Invalid integer input");
                 // scan = new Scanner(System.in);
                 scan.nextLine();
-		    }
+            }
         } while (done == false);
 
         scan.close();
