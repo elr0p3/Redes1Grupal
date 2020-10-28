@@ -1,21 +1,36 @@
 package r0p3;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import jpcap.*;
 
 public class Physical extends Layer {
 
+    private JpcapCaptor captor;
     private int interfaceSelect = 0;
+    private int num_of_bytes = 0;
+    private boolean promisc;
+    private int caputure_timeout = 0;
+
+    public Physical(int num, boolean prmsc, int cap_time) {
+        num_of_bytes        = num;
+        promisc             = prmsc;
+        caputure_timeout    = cap_time;
+    }
+
+    public Physical() {
+        this(65535, false, 20);
+    }
     
     @Override
     public void configuration() {
         Scanner scan = new Scanner(System.in);
         boolean done = false;
-
         NetworkInterface[] devices = JpcapCaptor.getDeviceList();
 
         for (int i = 0; i < devices.length; i++)
-            System.out.println(i+": "+devices[i].name + "(" + devices[i].description+")");
+            System.out.println(i + ": " + devices[i].name +
+                    '(' + devices[i].description + ')');
 
         do {
           try {
@@ -28,11 +43,23 @@ public class Physical extends Layer {
                     System.err.println("ERROR! Number out of range");
             } catch (InputMismatchException e) {
 		        System.err.println("ERROR! Invalid integer input");
-                scan = new Scanner(System.in);
+                // scan = new Scanner(System.in);
+                scan.nextLine();
 		    }
         } while (done == false);
 
         scan.close();
+
+        try {
+            captor = JpcapCaptor.openDevice(
+                    devices[interfaceSelect],
+                    num_of_bytes,
+                    promisc,
+                    caputure_timeout
+            );
+        } catch (IOException err) {
+            System.err.println(err);
+        }
     }
 
     @Override

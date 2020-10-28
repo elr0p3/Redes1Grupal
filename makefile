@@ -3,6 +3,7 @@
 .PHONI := c r
 
 c :
+	@if [ ! -d build/ ]; then mkdir build/; fi
 	javac -classpath ./lib/jpcap.jar src/**/*.java -d ./build/
 
 r : 
