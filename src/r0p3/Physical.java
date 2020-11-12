@@ -10,11 +10,13 @@ public class Physical extends Layer {
 
 	private NetworkInterface selectInterface;
     private JpcapCaptor captor;
-    private int interfaceSelect = 0;
+    private int numberInterface = 0;
     private int num_of_bytes = 0;
     private boolean promisc;
     private int caputure_timeout = 0;
 	private int number_packets = 0;
+
+	Packet[] p_prueba = new Packet[10];
 
     public Physical(int num, boolean prmsc, int cap_time, int num_pac) {
         num_of_bytes        = num;
@@ -31,6 +33,12 @@ public class Physical extends Layer {
     public void run() {
         configuration();
 		receivePackage(number_packets);
+		try {
+			for (Packet p: p_prueba)
+				sendPackage(p);
+		} catch (IOException err) {
+			System.err.println("TE LA MAMASTE: " + err);
+		}
     }
     
     @Override
@@ -47,8 +55,8 @@ public class Physical extends Layer {
             try {
                 System.out.print("Introduce the interface to use: ");
                 System.out.flush();
-                interfaceSelect = scan.nextInt();
-                if (0 <= interfaceSelect && interfaceSelect < devices.length)
+                numberInterface = scan.nextInt();
+                if (0 <= numberInterface && numberInterface < devices.length)
                     done = true;
                 else
                     System.err.println("ERROR! Number out of range");
@@ -62,7 +70,7 @@ public class Physical extends Layer {
         scan.close();
 
         try {
-			selectInterface = devices[interfaceSelect];
+			selectInterface = devices[numberInterface];
             captor = JpcapCaptor.openDevice(
                     selectInterface,
                     num_of_bytes,
@@ -79,30 +87,36 @@ public class Physical extends Layer {
 			while (true)
 				System.out.println(captor.getPacket().toString());
 		else 
-			for (int i = 0; i < pac_num; i++)
+			for (int i = 0; i < pac_num; i++) {
 				System.out.println(captor.getPacket().toString());
+				p_prueba[i] = captor.getPacket();
+			}
 
 		captor.close();
 	}
 
-	public void sendPackage(NetworkInterface interfaceSend) 
-			throws IOException {
-		JpcapSender sender= JpcapSender.openDevice(interfaceSend);
-		Packet p = new Packet();
-		//create an Ethernet packet (frame)
-		EthernetPacket ether = new EthernetPacket();
-		//set frame type as IP
-		ether.frametype = EthernetPacket.ETHERTYPE_IP;
-		//set source and destination MAC addresses
-		ether.src_mac = selectInterface.mac_address;
+	public void sendPackage(Packet p) throws IOException {
+
+		JpcapSender sender = JpcapSender.openDevice(selectInterface);
+		EthernetPacket ether = new EthernetPacket(); 	// create an Ethernet packet (frame)
+
+		ether.frametype = EthernetPacket.ETHERTYPE_IP;	// set frame type as IP
+		ether.src_mac = selectInterface.mac_address;	//set source and destination MAC addresses
 		ether.dst_mac = new byte[]{
-			(byte)15,(byte)15,(byte)15,(byte)15,(byte)15,(byte)15,
-			(byte)15,(byte)15,(byte)15,(byte)15,(byte)15,(byte)15
+			(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
 		};
+		// ether.dst_mac = selectInterface.mac_address;
 		
 		p.datalink = ether;
-		//send the packet p
-		sender.sendPacket(p);
+
+		System.out.println("MAC -> " + selectInterface.mac_address);
+		System.out.print(" MAC address:");
+  		for (byte b : selectInterface.mac_address)
+    		System.out.print(Integer.toHexString(b&0xff) + ":");
+  		System.out.println();
+
+
+		sender.sendPacket(p);	//send the packet p
 
 		sender.close();
 	}
