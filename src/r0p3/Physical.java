@@ -16,7 +16,7 @@ public class Physical extends Layer {
     private int caputure_timeout = 0;
 	private int number_packets = 0;
 
-	Packet[] p_prueba = new Packet[10];
+	// Packet[] p_prueba = new Packet[10];
 
     public Physical(int num, boolean prmsc, int cap_time, int num_pac) {
         num_of_bytes        = num;
@@ -34,8 +34,9 @@ public class Physical extends Layer {
         configuration();
 		receivePackage(number_packets);
 		try {
-			for (Packet p: p_prueba)
-				sendPackage(p);
+			for (SelfPacket p: getPackets()) {
+				sendPackage(p.getPacket());
+			}
 		} catch (IOException err) {
 			System.err.println("TE LA MAMASTE: " + err);
 		}
@@ -89,7 +90,9 @@ public class Physical extends Layer {
 		else 
 			for (int i = 0; i < pac_num; i++) {
 				System.out.println(captor.getPacket().toString());
-				p_prueba[i] = captor.getPacket();
+				SelfPacket p = new SelfPacket(captor.getPacket());
+				p.printDataLinkEth();
+				appendPacket(p);
 			}
 
 		captor.close();
@@ -145,4 +148,11 @@ public class Physical extends Layer {
             for (NetworkInterfaceAddress a : devices[i].addresses)
                 System.out.println(" address:"+a.address + " " + a.subnet + " "+ a.broadcast);
         }
+*/
+
+/*
+
+	\ /
+	 x
+	/ \
 */

@@ -14,11 +14,11 @@ public class Logical extends Layer {
 
     @Override
     public void run() {
-
+//Pedir al usuarios la mac destino o hardcodeada y introducir los demas datos
     }
 	
 	public void configuration() {
-		
+//Usar semaforo para enviar paquete
     }
 
     public void passPacketLayer(SelfPacket packet) {

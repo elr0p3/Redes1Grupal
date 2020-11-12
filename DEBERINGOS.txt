@@ -1,0 +1,12 @@
+Physical
+	Limpiar codigo de mierda
+
+Logical
+	Pedir al usuarios la mac destino o hardcodeada y introducir los demas datos
+	Usar semaforo para enviar paquete
+
+Layer
+	Limpiar codigo de mierda
+
+SelfPacket
+	getters setters (Limpiar codigo de mierda)
