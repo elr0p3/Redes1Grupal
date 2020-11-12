@@ -72,10 +72,10 @@ public class Physical extends Layer {
         try {
 			selectInterface = devices[numberInterface];
             captor = JpcapCaptor.openDevice(
-                    selectInterface,
-                    num_of_bytes,
-                    promisc,
-                    caputure_timeout
+                selectInterface,
+                num_of_bytes,
+                promisc,
+                caputure_timeout
             );
         } catch (IOException err) {
             System.err.println(err);
