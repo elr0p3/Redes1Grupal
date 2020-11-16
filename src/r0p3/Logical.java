@@ -1,13 +1,13 @@
 package r0p3;
 
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Logical extends Layer {
 
-	public byte[] srcMac;
-	public byte[] destMac;
-	public short type;
-	public byte[] data;
+	private byte[] srcMac;
+	private byte[] destMac;
 
 	public Logical() {
 		// destMac=p.
@@ -16,7 +16,23 @@ public class Logical extends Layer {
 
     @Override
     public void run() {
-//Usar semaforo para enviar paquete
+
+		while(true) {
+			// MAC FILTER
+
+			if(getPacket_list().size() > 0) {
+				if(getPacket_list().get(0).getMac_src() != srcMac) {
+                     //creamos un nuevo paquete y le enviamos los nuevos parametros
+                     getPacket_list().get(0).setMac_src(srcMac);
+					 try {
+                     	sendToBottomLayer(getPacket_list().get(0));
+						//enviamos el paquete a la capa de abajo
+					 } catch (InterruptedException err) {
+						System.err.println("ERROR! PASSING PACKET TO LAYER 1" + err);
+					 }
+				}
+			}
+		}
     }
 	
 	public void configuration() {
@@ -29,48 +45,57 @@ public class Logical extends Layer {
         String[] macAddressParts;
         char[] ch = new char[12];
         
-      	do {
-			System.out.print("Write MAC Address destination: ");
-			System.out.flush();
-			direccion = input.nextLine();
+          do {
+            System.out.print("Write MAC Address source: ");
+            System.out.flush();
+            direccion = input.nextLine();
         
-			macAddress = direccion;
-			macAddressParts = macAddress.split(":");
+            macAddress = direccion;
+            macAddressParts = macAddress.split(":");
          
-			if(macAddressParts.length == 6) {
-				//Pass the string  
+            if(macAddressParts.length == 6) {
+                //Pass the string  
                 direccion = "";
                 for (int j = 0; j < 6; j++)
-					direccion += macAddressParts[j]; 
+                    direccion += macAddressParts[j]; 
                
                 //introduce the values of each string
                 for (int i = 0; i < 12; i++)
-					ch[i] = direccion.charAt(i); 
+                    ch[i] = direccion.charAt(i); 
                     
                 for (char c : ch){
                     //check if each character is in the range
                     if(('0' <= c && c <= '9')||('a' <= c && c <= 'f')||('A' <= c && c <= 'F'))
-						check = true;
+                        check = true;
                     else {
                         check = false;
-						break;
+                        break;
                     }
+                        
                 }
-          	}
+			}
         } while(macAddressParts.length != 6 || check == false );
         
         // convert hex string to byte values
         Byte[] macAddressBytes = new Byte[6];
         for(int i = 0; i < 6; i++){
             Integer hex = Integer.parseInt(macAddressParts[i], 16);
-            macAddressBytes[i] = hex.byteValue();
+            srcMac[i] = hex.byteValue();
         }
+
+		
         
-        System.out.print("MIS PUTOS MUERTOS");
+        
+        //Broadcast for Destination Mac
+        destMac = new byte[]{
+            (byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff
+        };
     }
 
-    public void passPacketLayer(SelfPacket packet) {
-    		
-    }
+	private boolean isValidMac(String mac_address) {
+		Pattern p = Pattern.compile("^([\\dA-Fa-f]{2}[.:-]){5}([\\dA-Fa-f]{2})$");
+		Matcher m = p.matcher(mac_address);
+		return m.find();
+	}
 
 }
