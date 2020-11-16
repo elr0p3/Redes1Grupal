@@ -1,9 +1,11 @@
 Physical
-	Limpiar codigo de mierda
+	Limpiar codigo enviar paquetes
+    -- Recojida paquetes eficiente --
 
 Logical
-	Pedir al usuarios la mac destino o hardcodeada y introducir los demas datos
-	Usar semaforo para enviar paquete
+	-- Pedir al usuarios la mac destino o hardcodeada y introducir los demas datos --
+	-- Usar semaforo para enviar paquete --
+    Filtro de paquetes recibidos (CONSTRUCTORES)
 
 Layer
 	Limpiar codigo de mierda

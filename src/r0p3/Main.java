@@ -8,10 +8,10 @@ public class Main {
         // System.out.println(System.getProperty("java.library.path"));
 
         Layer l1, l2;
-
-		l1 = new Physical();
+		l1 = new Physical(0);
 		l2 = new Logical();
 
+        // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 		l1.setUp(l2);
 
 		// l2.setDown(l1);
@@ -25,7 +25,21 @@ public class Main {
 		
 		// l5.setDown(l4);
 
+
+        // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+        l1.configuration();
+        l2.configuration();
+        // l3.configuration();
+        // l4.configuration();
+        // l5.configuration();
+
+
+        // -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
         l1.start();
+        l2.start();
+        // l3.start();
+        // l4.start();
+        // l5.start();
 
     }
 

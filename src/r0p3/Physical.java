@@ -25,37 +25,23 @@ public class Physical extends Layer {
 		number_packets		= num_pac;
     }
 
-    public Physical() {
-        this(65535, false, 20, 10);
+    public Physical(int n_recv) {
+        this(65535, false, 20, n_recv);
     }
 
 	@Override
     public void run() {
-		System.out.println("THREAD -> " + Thread.currentThread().getName());
-        configuration();
-		receivePackage(number_packets);
 
-		for (SelfPacket pckt : this.getPacket_list())
-			try {
-				sendToUpperLayer(pckt);
-			} catch (InterruptedException err) {
-				System.err.println("TE LA REMAMASTE: " + err);
-			}
+        if (number_packets == 0) {
+            while (true) {
+                managePackages();
+            }
+        } else {
+            for (int i = 0; i < number_packets; i++) {
+                managePackages();
+            }
+        }
 
-		getUp().start();
-		try {
-			getUp().join();
-		} catch (InterruptedException err) {
-			System.err.println("TE LA REREMAMASTE: " + err);
-		}
-
-		
-		try {
-			for (SelfPacket p: getPacket_list())
-				sendPackage(p.getPacket());
-		} catch (IOException err) {
-			System.err.println("TE LA MAMASTE: " + err);
-		}
     }
     
     @Override
@@ -98,20 +84,37 @@ public class Physical extends Layer {
         }
     }   
 
-	public void receivePackage(int pac_num) {
-		if (pac_num == 0)
-			while (true)
-				System.out.println(captor.getPacket().toString());
-		else 
-			for (int i = 0; i < pac_num; i++) {
-				System.out.println(captor.getPacket().toString());
-				SelfPacket p = new SelfPacket(captor.getPacket());
-				p.printDataLinkEth();
-				appendPacket(p);
-			}
+    public void managePackages() {
 
-		captor.close();
-	}
+        // 1. Recieve new packet from medium
+        Packet pckt = captor.getPacket();
+        System.out.println("RECIEVE -> " + pckt.toString());
+
+        // 2. Pass packet to Layer 2
+		try {
+            if (pckt != null)
+			    sendToUpperLayer(new SelfPacket(pckt));
+		} catch (InterruptedException err) {
+			System.err.println("ERROR PASSING PACKET TO LAYER 2:\n" + err);
+		}
+
+        // 6. Check if there is anything in the list
+        if (this.getPacket_list().size() > 0) {
+            // 7. Send Packet to medium
+            try {
+	        	for (SelfPacket p: getPacket_list())
+	        		sendPackage(p.getPacket());
+	        } catch (IOException err) {
+	        	System.err.println("ERROR SENDING PACKET TO MEDIUM:\n" + err);
+	        }
+        }
+
+        // -- LAYER 2 THINGS --
+        // 3. Coger un paquete de la lista
+        // 4. Modificar paquete
+        // 5. Mandar paquete modificado a capa 1
+    }
+
 
 	public void sendPackage(Packet p) throws IOException {
 
@@ -138,6 +141,24 @@ public class Physical extends Layer {
 		sender.sendPacket(p);	//send the packet p
 		sender.close();
 	}
+
+
+    private void receivePackage() {
+		if (number_packets == 0)
+			while (true) {
+        		System.out.println(captor.getPacket().toString());
+            }
+		else 
+			for (int i = 0; i < number_packets; i++) {
+				System.out.println(captor.getPacket().toString());
+				SelfPacket p = new SelfPacket(captor.getPacket());
+				p.printDataLinkEth();
+				appendPacket(p);
+			}
+
+		captor.close();
+	}
+
 }
 
 

@@ -17,8 +17,6 @@ public class Logical extends Layer {
     @Override
     public void run() {
 //Usar semaforo para enviar paquete
-		System.out.println("THREAD -> " + Thread.currentThread().getName());
-		configuration();
     }
 	
 	public void configuration() {
@@ -57,7 +55,6 @@ public class Logical extends Layer {
                         check = false;
 						break;
                     }
-                        
                 }
           	}
         } while(macAddressParts.length != 6 || check == false );

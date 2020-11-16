@@ -21,14 +21,10 @@ public class Layer extends Thread {
 		// this(null, null);
 	// }
     
-    public void configuration() {
-
-    }
+    public void configuration() {}
 
     @Override
-    public void run() {
-
-    }
+    public void run() {}
 
 	
 	public void appendPacket(SelfPacket packet) {
@@ -56,17 +52,11 @@ public class Layer extends Thread {
 		this.down = down;
 	}
 
-	// public ArrayList<SelfPacket> getPacket_list() {
-		// return packet_list;
-	// }
-
-	// public void setPacket_list(ArrayList<SelfPacket> packet_list) {
-		// this.packet_list = packet_list;
-	// }
 	
 
 	public void sendToUpperLayer(SelfPacket packet) throws InterruptedException {
     	lock.acquire();
+        // int position = packet_list.indexOf(packet);
     	up.packet_list.add(packet);
     	lock.release();
     }
@@ -76,4 +66,9 @@ public class Layer extends Thread {
     	down.packet_list.add(packet);
     	lock.release();
     }
+
+    // public void setPacket_list(ArrayList<SelfPacket> packet_list) {
+		// this.packet_list = packet_list;
+	// }
+
 }
