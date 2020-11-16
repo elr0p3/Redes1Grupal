@@ -31,12 +31,28 @@ public class Physical extends Layer {
 
 	@Override
     public void run() {
+		System.out.println("THREAD -> " + Thread.currentThread().getName());
         configuration();
 		receivePackage(number_packets);
-		try {
-			for (SelfPacket p: getPackets()) {
-				sendPackage(p.getPacket());
+
+		for (SelfPacket pckt : this.getPacket_list())
+			try {
+				sendToUpperLayer(pckt);
+			} catch (InterruptedException err) {
+				System.err.println("TE LA REMAMASTE: " + err);
 			}
+
+		getUp().start();
+		try {
+			getUp().join();
+		} catch (InterruptedException err) {
+			System.err.println("TE LA REREMAMASTE: " + err);
+		}
+
+		
+		try {
+			for (SelfPacket p: getPacket_list())
+				sendPackage(p.getPacket());
 		} catch (IOException err) {
 			System.err.println("TE LA MAMASTE: " + err);
 		}
@@ -49,8 +65,7 @@ public class Physical extends Layer {
         NetworkInterface[] devices = JpcapCaptor.getDeviceList();
 
         for (int i = 0; i < devices.length; i++)
-            System.out.println(i + ": " + devices[i].name +
-                    '(' + devices[i].description + ')');
+            System.out.println(i + ": " + devices[i].name + '(' + devices[i].description + ')');
 
         do {
             try {
@@ -68,7 +83,7 @@ public class Physical extends Layer {
             }
         } while (done == false);
 
-        scan.close();
+        // scan.close();
 
         try {
 			selectInterface = devices[numberInterface];
@@ -106,11 +121,12 @@ public class Physical extends Layer {
 		ether.frametype = EthernetPacket.ETHERTYPE_IP;	// set frame type as IP
 		ether.src_mac = selectInterface.mac_address;	//set source and destination MAC addresses
 		ether.dst_mac = new byte[]{
-			(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+			(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff
 		};
 		// ether.dst_mac = selectInterface.mac_address;
 		
 		p.datalink = ether;
+
 
 		System.out.println("MAC -> " + selectInterface.mac_address);
 		System.out.print(" MAC address:");
@@ -120,10 +136,11 @@ public class Physical extends Layer {
 
 
 		sender.sendPacket(p);	//send the packet p
-
 		sender.close();
 	}
 }
+
+
 
 
 /*
@@ -148,11 +165,4 @@ public class Physical extends Layer {
             for (NetworkInterfaceAddress a : devices[i].addresses)
                 System.out.println(" address:"+a.address + " " + a.subnet + " "+ a.broadcast);
         }
-*/
-
-/*
-
-	\ /
-	 x
-	/ \
 */

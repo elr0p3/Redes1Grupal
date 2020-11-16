@@ -35,7 +35,7 @@ public class Layer extends Thread {
 		packet_list.add(packet);
 	}
 
-	public ArrayList<SelfPacket> getPackets() {
+	public ArrayList<SelfPacket> getPacket_list() {
 		return packet_list;
 	}
 
