@@ -5,21 +5,13 @@ import java.util.concurrent.Semaphore;
 
 public class Layer extends Thread {
 
-	private Layer up;
-	private Layer down;
-	private ArrayList<SelfPacket> packet_list = new ArrayList<SelfPacket>();
-	private Semaphore lock = new Semaphore(1, true);
+	private Layer 					up;
+	private Layer 					down;
+	private ArrayList<SelfPacket> 	packet_list = new ArrayList<SelfPacket>();
+	private Semaphore 				lock 		= new Semaphore(1, true);
 
 
-	// public Layer(Layer u, Layer d) {
-		// up = u;
-		// down = d;
-		// packet_list = new ArrayList<SelfPacket>();
-	// }
-
-	// public Layer() {
-		// this(null, null);
-	// }
+	public Layer() {}
     
     public void configuration() {}
 
@@ -28,16 +20,24 @@ public class Layer extends Thread {
 
 	
 	public void appendPacket(SelfPacket packet) {
-		packet_list.add(packet);
+		this.packet_list.add(packet);
 	}
 
 	public ArrayList<SelfPacket> getPacket_list() {
-		return packet_list;
+		return this.packet_list;
+	}
+
+	public SelfPacket getPacketDiscarding(int i) {
+		return this.packet_list.remove(i);
+	}
+	public SelfPacket getPacketDiscarding(SelfPacket sp) {
+		int i = this.packet_list.indexOf(sp);
+		return this.packet_list.remove(i);
 	}
 
 
 	public Layer getUp() {
-		return up;
+		return this.up;
 	}
 
 	public void setUp(Layer up) {
@@ -45,7 +45,7 @@ public class Layer extends Thread {
 	}
 
 	public Layer getDown() {
-		return down;
+		return this.down;
 	}
 
 	public void setDown(Layer down) {
@@ -55,15 +55,17 @@ public class Layer extends Thread {
 	
 
 	public void sendToUpperLayer(SelfPacket packet) throws InterruptedException {
-    	lock.acquire();
-    	up.packet_list.add(packet);
-    	lock.release();
+    	this.lock.acquire();
+    	this.up.packet_list.add(packet);
+		System.out.println("SENDED TO LAYER 2");
+    	this.lock.release();
     }
     
     public void sendToBottomLayer(SelfPacket packet) throws InterruptedException {
-    	lock.acquire();
-    	down.packet_list.add(packet);
-    	lock.release();
+    	this.lock.acquire();
+    	this.down.packet_list.add(packet);
+		System.out.println("SENDED TO LAYER 1");
+    	this.lock.release();
     }
 
     // public void setPacket_list(ArrayList<SelfPacket> packet_list) {
