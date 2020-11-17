@@ -56,7 +56,6 @@ public class Layer extends Thread {
 
 	public void sendToUpperLayer(SelfPacket packet) throws InterruptedException {
     	lock.acquire();
-        // int position = packet_list.indexOf(packet);
     	up.packet_list.add(packet);
     	lock.release();
     }

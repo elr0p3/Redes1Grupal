@@ -143,47 +143,22 @@ public class Physical extends Layer {
 	}
 
 
-    private void receivePackage() {
-		if (number_packets == 0)
-			while (true) {
-        		System.out.println(captor.getPacket().toString());
-            }
-		else 
-			for (int i = 0; i < number_packets; i++) {
-				System.out.println(captor.getPacket().toString());
-				SelfPacket p = new SelfPacket(captor.getPacket());
-				p.printDataLinkEth();
-				appendPacket(p);
-			}
+    // private void receivePackage() {
+		// if (number_packets == 0)
+			// while (true) {
+                // System.out.println(captor.getPacket().toString());
+            // }
+		// else 
+			// for (int i = 0; i < number_packets; i++) {
+				// System.out.println(captor.getPacket().toString());
+				// SelfPacket p = new SelfPacket(captor.getPacket());
+				// p.printDataLinkEth();
+				// appendPacket(p);
+			// }
 
-		captor.close();
-	}
+		// captor.close();
+	// }
 
 }
 
 
-
-
-/*
-        //Obtain the list of network interfaces
-        NetworkInterface[] devices = JpcapCaptor.getDeviceList();
-
-        //for each network interface
-        for (int i = 0; i < devices.length; i++) {
-            //print out its name and description
-            System.out.println(i+": "+devices[i].name + "(" + devices[i].description+")");
-        
-            //print out its datalink name and description
-            System.out.println(" datalink: "+devices[i].datalink_name + "(" + devices[i].datalink_description+")");
-        
-            //print out its MAC address
-            System.out.print(" MAC address:");
-            for (byte b : devices[i].mac_address)
-              System.out.print(Integer.toHexString(b&0xff) + ":");
-            System.out.println();
-        
-            //print out its IP address, subnet mask and broadcast address
-            for (NetworkInterfaceAddress a : devices[i].addresses)
-                System.out.println(" address:"+a.address + " " + a.subnet + " "+ a.broadcast);
-        }
-*/
