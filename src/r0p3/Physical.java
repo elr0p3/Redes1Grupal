@@ -31,13 +31,18 @@ public class Physical extends Layer {
         while (true) {
         	// 1. Recieve new packet from medium
        		Packet pckt = captor.getPacket();
-       		System.out.println("\u001B[36m" + " -- RECIEVE -> " + this.macAddressesToString(pckt) + "\u001B[0m");
 
        		// 2. Pass packet to Layer 2
 	   		try {
        		    if (pckt != null) {
+       				System.out.println("\u001B[36m" + " -- RECIEVE -> " + this.macAddressesToString(pckt) + "\u001B[0m");
 	   				System.out.println("\u001B[33m" + "SENDING TO LOGICAL\t-2-" + "\u001B[0m");
 	   			    this.sendToUpperLayer(new SelfPacket(pckt));
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException err) {
+						System.err.println(err);
+					}
 	   			}
 	   		} catch (InterruptedException err) {
 	   			System.err.println("ERROR PASSING PACKET TO LAYER 2:\n" + err);
