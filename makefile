@@ -8,3 +8,7 @@ c :
 
 r : 
 	java -Djava.library.path=./lib/ -classpath ./lib/jpcap.jar:./build/ r0p3.Main
+
+d :
+	jdb -sourcepath ./src -Djava.library.path=./lib/ -classpath ./lib/jpcap.jar:./build/ r0p3.Main
+

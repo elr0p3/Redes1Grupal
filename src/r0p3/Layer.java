@@ -57,14 +57,14 @@ public class Layer extends Thread {
 	public void sendToUpperLayer(SelfPacket packet) throws InterruptedException {
     	this.lock.acquire();
     	this.up.packet_list.add(packet);
-		System.out.println("SENDED TO LAYER 2");
+		System.out.println("\u001B[33m" + "SENDED TO LAYER 2" + "\u001B[0m");
     	this.lock.release();
     }
     
     public void sendToBottomLayer(SelfPacket packet) throws InterruptedException {
     	this.lock.acquire();
     	this.down.packet_list.add(packet);
-		System.out.println("SENDED TO LAYER 1");
+		System.out.println("\u001B[34m" + "SENDED TO LAYER 1" + "\u001B[0m");
     	this.lock.release();
     }
 

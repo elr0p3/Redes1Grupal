@@ -30,8 +30,37 @@ public class Physical extends Layer {
 	@Override
     public void run() {
         while (true) {
-        	this.managePackages();
+        	// 1. Recieve new packet from medium
+       		Packet pckt = captor.getPacket();
+       		System.out.println("\u001B[36m" + " -- RECIEVE -> " + this.macAddressesToString(pckt) + "\u001B[0m");
+
+       		// 2. Pass packet to Layer 2
+	   		try {
+       		    if (pckt != null) {
+	   				System.out.println("\u001B[33m" + "SENDING TO LAYER 2" + "\u001B[0m");
+	   			    this.sendToUpperLayer(new SelfPacket(pckt));
+	   			}
+	   		} catch (InterruptedException err) {
+	   			System.err.println("ERROR PASSING PACKET TO LAYER 2:\n" + err);
+	   		}
+
+       		// 6. Check if there is anything in the list
+       		if (this.getPacket_list().size() > 0) {
+	   			System.out.println("\u001B[35m" + "PHYSICAL MARIKONG " + this.getPacket_list().size() + "\u001B[0m");
+       		    // 7. Send Packet to medium
+       		    try {
+	   				this.sendPackage(this.getPacketDiscarding(0).getPacket());
+	   		    } catch (IOException err) {
+	   		    	System.err.println("ERROR SENDING PACKET TO MEDIUM:\n" + err);
+	   		    }
+       		}
         }
+
+		// -- LAYER 2 THINGS --
+        // 3. Coger un paquete de la lista
+        // 4. Modificar paquete
+        // 5. Mandar paquete modificado a capa 1
+
     }
     
     @Override
@@ -73,70 +102,24 @@ public class Physical extends Layer {
         }
     }   
 
-    public void managePackages() {
-
-        // 1. Recieve new packet from medium
-        Packet pckt = captor.getPacket();
-        System.out.println(" -- RECIEVE -> " + this.macAddressToString(pckt));
-
-        // 2. Pass packet to Layer 2
-		try {
-            if (pckt != null) {
-				System.out.println("SENDING TO LAYER 2");
-			    this.sendToUpperLayer(new SelfPacket(pckt));
-			}
-		} catch (InterruptedException err) {
-			System.err.println("ERROR PASSING PACKET TO LAYER 2:\n" + err);
-		}
-
-        // 6. Check if there is anything in the list
-        if (this.getPacket_list().size() > 0) {
-			System.out.println("PHYSICAL MARIKONG " + this.getPacket_list().size());
-            // 7. Send Packet to medium
-            try {
-				this.sendPackage(this.getPacketDiscarding(0).getPacket());
-	        } catch (IOException err) {
-	        	System.err.println("ERROR SENDING PACKET TO MEDIUM:\n" + err);
-	        }
-        }
-
-        // -- LAYER 2 THINGS --
-        // 3. Coger un paquete de la lista
-        // 4. Modificar paquete
-        // 5. Mandar paquete modificado a capa 1
-    }
-
 
 	public void sendPackage(Packet p) throws IOException {
-
 		JpcapSender sender = JpcapSender.openDevice(this.selectInterface);
-		EthernetPacket ether = new EthernetPacket(); 	// create an Ethernet packet (frame)
 
-		ether.frametype = EthernetPacket.ETHERTYPE_IP;	// set frame type as IP
-		ether.src_mac = selectInterface.mac_address;	//set source and destination MAC addresses
-		// ether.dst_mac = new byte[]{
-			// (byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff
-		// };
-		// ether.dst_mac = selectInterface.mac_address;
-		
-		p.datalink = ether;
+		System.out.println("\u001B[36m" + " -- SEND -> " + this.macAddressesToString(p) + "\u001B[0m");
 
-		System.out.println(" -- SEND -> " + this.macAddressToString(p));
-
-		sender.sendPacket(p);	//send the packet p
+		sender.sendPacket(p);
 		sender.close();
 	}
 
 
-	private String macAddressToString(Packet p) {
+	private String macAddressesToString(Packet p) {
 		String macs = "";
-
 		for (byte b : ((EthernetPacket)p.datalink).dst_mac)
     		macs += Integer.toHexString(b&0xff) + ":";
 		macs += " - ";
 		for (byte b : ((EthernetPacket)p.datalink).src_mac)
     		macs += Integer.toHexString(b&0xff) + ":";
-
 		return macs;
 	}
 

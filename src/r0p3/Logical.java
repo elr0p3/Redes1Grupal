@@ -1,7 +1,6 @@
 package r0p3;
 
 import java.util.Scanner;
-// import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Logical extends Layer {
@@ -21,19 +20,26 @@ public class Logical extends Layer {
 
 		while(true) {
 			if(this.getPacket_list().size() > 0) {
-			System.out.println("LOGICAL MARIKONG " + this.getPacket_list().size());
+			System.out.println("\u001B[35m" + "LOGICAL MARIKONG " + this.getPacket_list().size() + "\u001B[0m");
 				s_packet = this.getPacketDiscarding(0);
 				// If it is a packet not send by us
 				if(s_packet.getMac_src() != srcMac) {
 					s_packet.setMac_src(this.srcMac);
 					s_packet.setMac_dst(this.dstMac);
 					try {
+						System.out.println("\u001B[34m" + "SENDING TO LAYER 1" + "\u001B[0m");
 						this.sendToBottomLayer(s_packet);
-						System.out.println("SENDING TO LAYER 1");
 					} catch (InterruptedException err) {
 						System.err.println("ERROR! PASSING PACKET TO LAYER 1:\n" + err);
 					}
 				}
+			} else {
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException err) {
+					System.err.println(err);
+				}
+				System.out.println("DENTRO -------------------------> " + this.getPacket_list().size());
 			}
 		}
 
@@ -65,9 +71,6 @@ public class Logical extends Layer {
     }
 
 	private boolean isValidMacAddress(String mac_address) {
-		// Pattern p = Pattern.compile("^([\\dA-Fa-f]{2}[.:-]){5}([\\dA-Fa-f]{2})$");
-		// Matcher m = p.matcher(mac_address);
-		// return m.find();
 		return Pattern
 				.compile("^([\\dA-Fa-f]{2}[.:-]){5}([\\dA-Fa-f]{2})$")
 				.matcher(mac_address)

@@ -47,7 +47,9 @@ public class SelfPacket {
 	}
 
 	public void setMac_src(byte[] mac_src) {
-		this.mac_src = mac_src;
+		this.mac_src 			= mac_src;
+		this.eth_data.src_mac	= this.mac_src;
+		this.packet.datalink 	= this.eth_data;
 	}
 
 	public byte[] getMac_dst() {
@@ -55,7 +57,9 @@ public class SelfPacket {
 	}
 
 	public void setMac_dst(byte[] mac_dst) {
-		this.mac_dst = mac_dst;
+		this.mac_dst 			= mac_dst;
+		this.eth_data.dst_mac	= this.mac_dst;
+		this.packet.datalink 	= this.eth_data;
 	}
 
 	public short getEther_type() {
@@ -71,10 +75,10 @@ public class SelfPacket {
 	}
 
 	public Packet getPacket() {
-		this.eth_data.dst_mac 	= this.mac_dst;
-		this.eth_data.src_mac 	= this.mac_src;
-		this.eth_data.frametype	= this.ether_type;
-		this.packet.datalink 	= this.eth_data;
+		// this.eth_data.dst_mac 	= this.mac_dst;
+		// this.eth_data.src_mac 	= this.mac_src;
+		// this.eth_data.frametype	= this.ether_type;
+		// this.packet.datalink 	= this.eth_data;
 
 		return this.packet;
 	}
