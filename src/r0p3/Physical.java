@@ -15,7 +15,6 @@ public class Physical extends Layer {
     private boolean 			promisc;
     private int 				caputure_timeout 	= 0;
 
-	// Packet[] p_prueba = new Packet[10];
 
     public Physical(int num, boolean prmsc, int cap_time) {
     	this.num_of_bytes        = num;
@@ -37,7 +36,7 @@ public class Physical extends Layer {
        		// 2. Pass packet to Layer 2
 	   		try {
        		    if (pckt != null) {
-	   				System.out.println("\u001B[33m" + "SENDING TO LAYER 2" + "\u001B[0m");
+	   				System.out.println("\u001B[33m" + "SENDING TO LOGICAL\t-2-" + "\u001B[0m");
 	   			    this.sendToUpperLayer(new SelfPacket(pckt));
 	   			}
 	   		} catch (InterruptedException err) {
@@ -46,7 +45,7 @@ public class Physical extends Layer {
 
        		// 6. Check if there is anything in the list
        		if (this.getPacket_list().size() > 0) {
-	   			System.out.println("\u001B[35m" + "PHYSICAL MARIKONG " + this.getPacket_list().size() + "\u001B[0m");
+	   			System.out.println("\u001B[35m" + "PHYSICAL MARIKONG\t~" + this.getPacket_list().size() + "~" + "\u001B[0m");
        		    // 7. Send Packet to medium
        		    try {
 	   				this.sendPackage(this.getPacketDiscarding(0).getPacket());
@@ -55,11 +54,6 @@ public class Physical extends Layer {
 	   		    }
        		}
         }
-
-		// -- LAYER 2 THINGS --
-        // 3. Coger un paquete de la lista
-        // 4. Modificar paquete
-        // 5. Mandar paquete modificado a capa 1
 
     }
     

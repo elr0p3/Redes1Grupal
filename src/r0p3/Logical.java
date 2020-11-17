@@ -20,14 +20,16 @@ public class Logical extends Layer {
 
 		while(true) {
 			if(this.getPacket_list().size() > 0) {
-			System.out.println("\u001B[35m" + "LOGICAL MARIKONG " + this.getPacket_list().size() + "\u001B[0m");
+			System.out.println("\u001B[35m" + "LOGICAL MARIKONG\t~" + this.getPacket_list().size() + "~" + "\u001B[0m");
+				// 3. Take a packet from the list
 				s_packet = this.getPacketDiscarding(0);
-				// If it is a packet not send by us
-				if(s_packet.getMac_src() != srcMac) {
+				if(s_packet.getMac_src() != this.srcMac) {	// If it is a packet not send by us
+					// 4. Modify MAC addresses from the packet
 					s_packet.setMac_src(this.srcMac);
 					s_packet.setMac_dst(this.dstMac);
+					// 5. Send back to Layer 1
 					try {
-						System.out.println("\u001B[34m" + "SENDING TO LAYER 1" + "\u001B[0m");
+						System.out.println("\u001B[34m" + "SENDING TO PHYSICAL\t-1-" + "\u001B[0m");
 						this.sendToBottomLayer(s_packet);
 					} catch (InterruptedException err) {
 						System.err.println("ERROR! PASSING PACKET TO LAYER 1:\n" + err);
