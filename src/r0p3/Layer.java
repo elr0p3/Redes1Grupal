@@ -1,13 +1,14 @@
 package r0p3;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.Semaphore;
 
 public class Layer extends Thread {
 
 	private Layer 					up;
 	private Layer 					down;
-	private ArrayList<SelfPacket> 	packet_list = new ArrayList<SelfPacket>();
+	private LinkedList<SelfPacket> 	packet_list = new LinkedList<SelfPacket>();
 	private Semaphore 				lock 		= new Semaphore(1, true);
 
 
@@ -23,16 +24,12 @@ public class Layer extends Thread {
 		this.packet_list.add(packet);
 	}
 
-	public ArrayList<SelfPacket> getPacket_list() {
+	public LinkedList<SelfPacket> getPacket_list() {
 		return this.packet_list;
 	}
 
-	public SelfPacket getPacketDiscarding(int i) {
-		return this.packet_list.remove(i);
-	}
-	public SelfPacket getPacketDiscarding(SelfPacket sp) {
-		int i = this.packet_list.indexOf(sp);
-		return this.packet_list.remove(i);
+	public SelfPacket getPacketDiscarding() {
+		return this.packet_list.poll();
 	}
 
 

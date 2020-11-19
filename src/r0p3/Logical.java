@@ -19,29 +19,28 @@ public class Logical extends Layer {
 		SelfPacket s_packet;
 
 		while(true) {
-			if(this.getPacket_list().size() > 0) {
-			System.out.println("\u001B[35m" + "LOGICAL MARIKONG\t~" + this.getPacket_list().size() + "~" + "\u001B[0m");
-				// 3. Take a packet from the list
-				s_packet = this.getPacketDiscarding(0);
-				if(s_packet.getMac_src() != this.srcMac) {	// If it is a packet not send by us
-					// 4. Modify MAC addresses from the packet
-					s_packet.setMac_src(this.srcMac);
-					s_packet.setMac_dst(this.dstMac);
-					// 5. Send back to Layer 1
-					try {
+			try {
+				if(!this.getPacket_list().isEmpty()) {
+				System.out.println("\u001B[35m" + "LOGICAL MARIKONG\t~" + this.getPacket_list().size() + "~" + "\u001B[0m");
+					// 3. Take a packet from the list
+					s_packet = this.getPacketDiscarding();
+					System.out.println(s_packet);
+					if(s_packet == null)
+						System.err.println("WARNING! NULL PACKET");
+					if(s_packet.getMac_src() != this.srcMac) {	// If it is a packet not send by us
+						// 4. Modify MAC addresses from the packet
+						s_packet.setMac_src(this.srcMac);
+						s_packet.setMac_dst(this.dstMac);
+						// 5. Send back to Layer 1
 						System.out.println("\u001B[34m" + "SENDING TO PHYSICAL\t-1-" + "\u001B[0m");
 						this.sendToBottomLayer(s_packet);
-					} catch (InterruptedException err) {
-						System.err.println("ERROR! PASSING PACKET TO LAYER 1:\n" + err);
 					}
-				}
-			} else {
-				try {
+				} else {
 					Thread.sleep(50);
-				} catch (InterruptedException err) {
-					System.err.println(err);
+					// System.out.println("DENTRO -------------------------> " + this.getPacket_list().size());
 				}
-				System.out.println("DENTRO -------------------------> " + this.getPacket_list().size());
+			} catch (Exception err) {
+				System.err.println("ERROR!\n" + err);
 			}
 		}
 

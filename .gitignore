@@ -2,6 +2,7 @@
 build/
 *.log
 output
+test/
 
 # Eclipse gitignore -> https://github.com/github/gitignore/blob/master/Global/Eclipse.gitignore
 .metadata

@@ -7,6 +7,7 @@ public class Main {
         // System.setProperty("java.library.path", "./lib/");
         // System.out.println(System.getProperty("java.library.path"));
 
+		System.out.println("HOLA TONTO");
         Layer l1, l2;
 		l1 = new Physical();
 		l2 = new Logical();

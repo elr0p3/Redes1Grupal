@@ -29,32 +29,28 @@ public class Physical extends Layer {
 	@Override
     public void run() {
         while (true) {
-        	// 1. Recieve new packet from medium
-       		Packet pckt = captor.getPacket();
-
-       		// 2. Pass packet to Layer 2
 	   		try {
+        		// 1. Recieve new packet from medium
+       			Packet pckt = captor.getPacket();
        		    if (pckt != null) {
        				System.out.println("\u001B[36m" + " -- RECIEVE -> " + this.macAddressesToString(pckt) + "\u001B[0m");
 	   				System.out.println("\u001B[33m" + "SENDING TO LOGICAL\t-2-" + "\u001B[0m");
+       				// 2. Pass packet to Layer 2
 	   			    this.sendToUpperLayer(new SelfPacket(pckt));
-					try {
-						Thread.sleep(50);
-					} catch (InterruptedException err) {
-						System.err.println(err);
-					}
+					// Thread.sleep(50);
 	   			}
-	   		} catch (InterruptedException err) {
+	   		} catch (Exception err) {
 	   			System.err.println("ERROR PASSING PACKET TO LAYER 2:\n" + err);
 	   		}
 
        		// 6. Check if there is anything in the list
-       		if (this.getPacket_list().size() > 0) {
+       		if (!this.getPacket_list().isEmpty()) {
 	   			System.out.println("\u001B[35m" + "PHYSICAL MARIKONG\t~" + this.getPacket_list().size() + "~" + "\u001B[0m");
        		    // 7. Send Packet to medium
        		    try {
-	   				this.sendPackage(this.getPacketDiscarding(0).getPacket());
-	   		    } catch (IOException err) {
+					Packet pckt_send = this.getPacketDiscarding().getPacket();
+	   				this.sendPackage(pckt_send);
+	   		    } catch (Exception err) {
 	   		    	System.err.println("ERROR SENDING PACKET TO MEDIUM:\n" + err);
 	   		    }
        		}

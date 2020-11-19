@@ -12,3 +12,7 @@ r :
 d :
 	jdb -sourcepath ./src -Djava.library.path=./lib/ -classpath ./lib/jpcap.jar:./build/ r0p3.Main
 
+t :
+	if [ ! -d build_test/ ]; then mkdir build_test/; fi
+	javac -classpath ./lib/jpcap.jar test/*.java -d ./build_test/
+	java -Djava.library.path=./lib/ -classpath ./lib/jpcap.jar:./build_test/ Main
