@@ -8,11 +8,14 @@ public class Layer extends Thread {
 
 	private Layer 					up;
 	private Layer 					down;
-	private LinkedList<SelfPacket> 	packet_list = new LinkedList<SelfPacket>();
-	private Semaphore 				lock 		= new Semaphore(1, true);
+	private LinkedList<SelfPacket> 	packet_list;
+	private Semaphore 				lock;
 
 
-	public Layer() {}
+	public Layer() {
+		packet_list = new LinkedList<SelfPacket>();
+		lock		= new Semaphore(1, true);
+	}
     
     public void configuration() {}
 

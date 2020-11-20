@@ -21,7 +21,7 @@ public class Logical extends Layer {
 		while(true) {
 			try {
 				if(!this.getPacket_list().isEmpty()) {
-				System.out.println("\u001B[35m" + "LOGICAL MARIKONG\t~" + this.getPacket_list().size() + "~" + "\u001B[0m");
+				System.out.println("\u001B[35m" + "LOGICAL LIST PCKT\t~" + this.getPacket_list().size() + "~" + "\u001B[0m");
 					// 3. Take a packet from the list
 					s_packet = this.getPacketDiscarding();
 					System.out.println(s_packet);
@@ -35,10 +35,10 @@ public class Logical extends Layer {
 						System.out.println("\u001B[34m" + "SENDING TO PHYSICAL\t-1-" + "\u001B[0m");
 						this.sendToBottomLayer(s_packet);
 					}
-				} else {
+				} /*else {
 					Thread.sleep(50);
 					// System.out.println("DENTRO -------------------------> " + this.getPacket_list().size());
-				}
+				}*/
 			} catch (Exception err) {
 				System.err.println("ERROR!\n" + err);
 			}
