@@ -1,4 +1,4 @@
-package r0p3;
+package r0p3.layers;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -34,7 +34,8 @@ public class Logical extends Layer {
 						s_packet.setMac_dst(this.dstMac);
 						// 5. Send back to Layer 1
 						System.out.println("\u001B[34m" + "SENDING TO PHYSICAL\t-1-" + "\u001B[0m");
-						this.sendToBottomLayer(s_packet);
+						// this.sendToBottomLayer(s_packet);
+						this.sendToUpperLayer(s_packet);
 					}
 				} else {
                     // Thread.sleep(50);

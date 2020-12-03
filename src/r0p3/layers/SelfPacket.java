@@ -1,4 +1,4 @@
-package r0p3;
+package r0p3.layers;
 
 import jpcap.packet.Packet;
 import jpcap.packet.DatalinkPacket;
@@ -67,7 +67,9 @@ public class SelfPacket {
 	}
 
 	public void setEther_type(short ether_type) {
-		this.ether_type = ether_type;
+		this.ether_type 		= ether_type;
+		this.eth_data.frametype	= this.ether_type;
+		this.packet.datalink	= this.eth_data;
 	}
 
 	public void setPacket(Packet packet) {

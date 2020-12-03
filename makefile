@@ -4,7 +4,7 @@
 
 c :
 	@if [ ! -d build/ ]; then mkdir build/; fi
-	javac -classpath ./lib/jpcap.jar src/**/*.java -d ./build/
+	javac -classpath ./lib/jpcap.jar src/r0p3/*.java src/r0p3/layers/*.java src/r0p3/protocols/*.java -d ./build/
 
 r : 
 	java -Djava.library.path=./lib/ -classpath ./lib/jpcap.jar:./build/ r0p3.Main

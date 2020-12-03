@@ -1,10 +1,11 @@
-package r0p3;
+package r0p3.layers;
+
+import r0p3.protocols.*;
 
 import java.util.HashMap;
 
 public class Network extends Layer {
 
-    private int type;
     private byte[] data;
     private HashMap<String, Protocol> protocols;
 
@@ -16,6 +17,8 @@ public class Network extends Layer {
     @Override
     public void run() {
         while(!this.finish) {
+			// EthernetPacket ethP = (EthernetPacket) packet2process.datalink;
+			// this.type = ethP.frametype;
 
         }
     }
@@ -24,5 +27,5 @@ public class Network extends Layer {
     public void configuration() {
 
     }
-    
+
 }

@@ -1,4 +1,4 @@
-package r0p3;
+package r0p3.layers;
 
 // import java.util.ArrayList;
 import java.util.LinkedList;
@@ -9,6 +9,7 @@ public class Layer extends Thread {
 	private     Layer 					up;
 	private     Layer 					down;
 	private     LinkedList<SelfPacket> 	packet_list;
+	private		LinkedList<SelfPacket>	pckt_list_bottom;
 	private     Semaphore 				lock;
     protected   boolean                 finish;
 
