@@ -6,15 +6,17 @@ import java.util.concurrent.Semaphore;
 
 public class Layer extends Thread {
 
-	private Layer 					up;
-	private Layer 					down;
-	private LinkedList<SelfPacket> 	packet_list;
-	private Semaphore 				lock;
+	private     Layer 					up;
+	private     Layer 					down;
+	private     LinkedList<SelfPacket> 	packet_list;
+	private     Semaphore 				lock;
+    protected   boolean                 finish;
 
 
 	public Layer() {
 		packet_list = new LinkedList<SelfPacket>();
 		lock		= new Semaphore(1, true);
+        this.finish = false;
 	}
     
     public void configuration() {}

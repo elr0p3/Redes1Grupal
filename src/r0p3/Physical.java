@@ -17,9 +17,10 @@ public class Physical extends Layer {
 
 
     public Physical(int num, boolean prmsc, int cap_time) {
-    	this.num_of_bytes        = num;
-    	this.promisc             = prmsc;
-    	this.caputure_timeout    = cap_time;
+    	this.num_of_bytes       = num;
+    	this.promisc            = prmsc;
+    	this.caputure_timeout   = cap_time;
+        this.finish             = false;
     }
 
     public Physical() {
@@ -28,7 +29,7 @@ public class Physical extends Layer {
 
 	@Override
     public void run() {
-        while (true) {
+        while (!this.finish) {
 	   		try {
         		// 1. Recieve new packet from medium
        			Packet pckt = captor.getPacket();

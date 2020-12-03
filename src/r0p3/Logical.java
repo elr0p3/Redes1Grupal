@@ -12,13 +12,14 @@ public class Logical extends Layer {
 	public Logical() {
 		this.srcMac	= new byte[MAC_LEN];
 		this.dstMac	= new byte[MAC_LEN];
+        this.finish = false;
 	}
 
     @Override
     public void run() {
 		SelfPacket s_packet;
 
-		while(true) {
+		while(!this.finish) {
 			try {
 				if(!this.getPacket_list().isEmpty()) {
 				System.out.println("\u001B[35m" + "LOGICAL LIST PCKT\t~" + this.getPacket_list().size() + "~" + "\u001B[0m");
@@ -35,17 +36,20 @@ public class Logical extends Layer {
 						System.out.println("\u001B[34m" + "SENDING TO PHYSICAL\t-1-" + "\u001B[0m");
 						this.sendToBottomLayer(s_packet);
 					}
-				} /*else {
-					Thread.sleep(50);
+				} else {
+                    // Thread.sleep(50);
 					// System.out.println("DENTRO -------------------------> " + this.getPacket_list().size());
-				}*/
+				}
 			} catch (Exception err) {
 				System.err.println("ERROR!\n" + err);
 			}
 		}
+        // for (int i = 0; i < 1000; i++)
+            System.out.println("MARIKONG");
 
     }
 	
+    @Override
 	public void configuration() {
 		Scanner scan = new Scanner(System.in);
         String mac_address;

@@ -1,5 +1,7 @@
 package r0p3;
 
+import java.util.Set;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -40,6 +42,13 @@ public class Main {
         // l3.start();
         // l4.start();
         // l5.start();
+        
+        try {
+            Thread.sleep(5000);
+        } catch (Exception err) {}
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        for(Thread t : threadSet)
+            System.out.println("THREAD -- " + t);
 
     }
 
