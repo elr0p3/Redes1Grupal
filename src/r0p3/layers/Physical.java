@@ -57,7 +57,7 @@ public class Physical extends Layer {
 				System.out.println("--- SENDED ---");
        		}
         }
-
+		this.getUp().setFinish(true);
     }
     
     @Override

@@ -12,7 +12,7 @@ public class SelfPacket {
 	private byte[] 			mac_src;
 	private byte[] 			mac_dst;
 	private short 			ether_type;
-
+	private boolean			up_down;	// true -> true || false -> down
 
 	
 	public SelfPacket(Packet p) {
@@ -23,6 +23,8 @@ public class SelfPacket {
 		this.mac_src 	= this.eth_data.src_mac;
 		this.mac_dst 	= this.eth_data.dst_mac;
 		this.ether_type = this.eth_data.frametype;
+
+		this.up_down	= true;
 	}
 
 
@@ -32,6 +34,7 @@ public class SelfPacket {
 
 	public void setData_link(DatalinkPacket data_link) {
 		this.data_link = data_link;
+		this.packet.datalink	= this.data_link;
 	}
 
 	public EthernetPacket getEth_data() {
@@ -39,7 +42,8 @@ public class SelfPacket {
 	}
 
 	public void setEth_data(EthernetPacket eth_data) {
-		this.eth_data = eth_data;
+		this.eth_data 			= eth_data;
+		this.packet.datalink	= this.eth_data;
 	}
 
 	public byte[] getMac_src() {
@@ -85,4 +89,15 @@ public class SelfPacket {
 		return this.packet;
 	}
 
+	public void setGoUp() {
+		this.up_down = true;
+	}
+
+	public void setgoDown() {
+		this.up_down = false;
+	}
+
+	public boolean goUp() {
+		return this.up_down;
+	}
 }

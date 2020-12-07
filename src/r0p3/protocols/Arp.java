@@ -1,16 +1,34 @@
 package r0p3.protocols;
 
-import jpcap.*;
+import r0p3.layers.*;
 
-public class Arp extends Protocol {
+import jpcap.packet.ARPPacket;
+
+public class Arp extends SelfProtocol {
 
 	public Arp() {
-
+		this.finish	= false;
 	}
 
 	@Override
 	public void run() {
+		while(!this.finish) {
+			try {
+				if (!this.getPacket_list().isEmpty()) {
+					this.lock.acquire();
 
+    				SelfPacket p = getPacketDiscarding();
+    				ARPPacket arpPacket = (ARPPacket) p.getPacket();
+    				System.out.println("ARP Packet recieved -> " + arpPacket.toString());
+
+					this.lock.release();
+				} else {
+					Thread.sleep(1);
+				}
+			} catch(InterruptedException err) {
+				System.err.println(err);
+			}
+		}
 	}
 
 	@Override
@@ -18,5 +36,4 @@ public class Arp extends Protocol {
 
 	}
 
-	// ARPPacket arpPacket =(ARPPacket) packet2process;
 }

@@ -19,7 +19,7 @@ public class Logical extends Layer {
     public void run() {
 		SelfPacket s_packet;
 
-		while(!this.finish) {
+		while(!this.finish /*&& !this.getPacket_list().isEmpty()*/) {
 			try {
 				if(!this.getPacket_list().isEmpty()) {
 				System.out.println("\u001B[35m" + "LOGICAL LIST PCKT\t~" + this.getPacket_list().size() + "~" + "\u001B[0m");
@@ -32,23 +32,27 @@ public class Logical extends Layer {
 						// 4. Modify MAC addresses from the packet
 						s_packet.setMac_src(this.srcMac);
 						s_packet.setMac_dst(this.dstMac);
-						// 5. Send back to Layer 1
-						System.out.println("\u001B[34m" + "SENDING TO PHYSICAL\t-1-" + "\u001B[0m");
-						// this.sendToBottomLayer(s_packet);
-						this.sendToUpperLayer(s_packet);
+						// 5. Send back to Layer 1 or Layer 3
+
+						// s_packet.setgoDown();
+						if (s_packet.goUp()) {
+							System.out.println("\u001B[31m" + "SENDING TO NETWORK\t-1-" + "\u001B[0m");
+							this.sendToUpperLayer(s_packet);
+						} else {
+							System.out.println("\u001B[34m" + "SENDING TO PHYSICAL\t-1-" + "\u001B[0m");
+							this.sendToBottomLayer(s_packet);
+						}
 					}
 				} else {
-                    // Thread.sleep(50);
+					Thread.sleep(1);
 					// System.out.println("DENTRO -------------------------> " + this.getPacket_list().size());
 				}
 			} catch (Exception err) {
 				System.err.println("ERROR!\n" + err);
 			}
 		}
-        // for (int i = 0; i < 1000; i++)
-            System.out.println("MARIKONG");
-
-    }
+		this.getUp().setFinish(true);
+	}
 	
     @Override
 	public void configuration() {
