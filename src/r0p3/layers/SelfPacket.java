@@ -33,7 +33,7 @@ public class SelfPacket {
 	}
 
 	public void setData_link(DatalinkPacket data_link) {
-		this.data_link = data_link;
+		this.data_link          = data_link;
 		this.packet.datalink	= this.data_link;
 	}
 

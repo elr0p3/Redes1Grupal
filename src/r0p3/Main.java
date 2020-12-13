@@ -48,7 +48,7 @@ public class Main {
        		// l4.start();
        		// l5.start();
         
-			// while(l2.isAlive()){}
+			// while(l2.isAlive()){Thread.sleep(1);}
 			// System.out.println("SAMATAOPACO");
 
             Thread.sleep(5000);

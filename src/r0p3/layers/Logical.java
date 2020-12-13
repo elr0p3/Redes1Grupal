@@ -26,31 +26,30 @@ public class Logical extends Layer {
 					// 3. Take a packet from the list
 					s_packet = this.getPacketDiscarding();
 					System.out.println(s_packet);
-					if(s_packet == null)
-						System.err.println("WARNING! NULL PACKET");
-					if(s_packet.getMac_src() != this.srcMac) {	// If it is a packet not send by us
-						// 4. Modify MAC addresses from the packet
-						s_packet.setMac_src(this.srcMac);
-						s_packet.setMac_dst(this.dstMac);
-						// 5. Send back to Layer 1 or Layer 3
 
-						// s_packet.setgoDown();
-						if (s_packet.goUp()) {
-							System.out.println("\u001B[31m" + "SENDING TO NETWORK\t-1-" + "\u001B[0m");
+					if (s_packet.goUp()) {
+					    if(s_packet.getMac_src() != this.srcMac) {	// Filter for packets send by us
+						    // 4. Modify MAC addresses from the packet
+						    s_packet.setMac_src(this.srcMac);
+						    s_packet.setMac_dst(this.dstMac);
+
+						    // 5. Send to Layer 3
+							System.out.println("\u001B[31m" + "SENDING TO NETWORK FROM LOGICAL\t-3-" + "\u001B[0m");
 							this.sendToUpperLayer(s_packet);
-						} else {
-							System.out.println("\u001B[34m" + "SENDING TO PHYSICAL\t-1-" + "\u001B[0m");
-							this.sendToBottomLayer(s_packet);
 						}
+                    } else {
+                        // Send back to Layer 1
+						System.out.println("\u001B[34m" + "SENDING TO PHYSICAL FROM LOGICAL\t-1-" + "\u001B[0m");
+						this.sendToBottomLayer(s_packet);
 					}
 				} else {
 					Thread.sleep(1);
-					// System.out.println("DENTRO -------------------------> " + this.getPacket_list().size());
 				}
 			} catch (Exception err) {
 				System.err.println("ERROR!\n" + err);
 			}
 		}
+
 		this.getUp().setFinish(true);
 	}
 	
