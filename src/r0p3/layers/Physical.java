@@ -35,7 +35,7 @@ public class Physical extends Layer {
        			Packet pckt = captor.getPacket();
        		    if (pckt != null) {
        				System.out.println("\u001B[36m" + " -- RECIEVE -> " + this.macAddressesToString(pckt) + "\u001B[0m");
-	   				System.out.println("\u001B[33m" + "SENDING TO LOGICAL\t-2-" + "\u001B[0m");
+	   				System.out.println("\u001B[33m" + "SENDING TO LOGICAL FROM PHYSICAL\t-2-" + "\u001B[0m");
        				// 2. Pass packet to Layer 2
 	   			    this.sendToUpperLayer(new SelfPacket(pckt));
 					// Thread.sleep(50);
@@ -57,6 +57,7 @@ public class Physical extends Layer {
 				System.out.println("--- SENDED ---");
        		}
         }
+
 		this.getUp().setFinish(true);
     }
     

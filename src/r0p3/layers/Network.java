@@ -40,10 +40,10 @@ public class Network extends Layer {
 					}
 
 					s_packet.setgoDown();
-					if (s_packet.goUp())
-						this.sendToUpperLayer(s_packet);
-					else {
-						System.out.println("\u001B[32m" + "SENDING TO LOGICAL\t-1-" + "\u001B[0m");
+					if (s_packet.goUp()) {
+						// this.sendToUpperLayer(s_packet);
+                    } else {
+						System.out.println("\u001B[32m" + "SENDING TO LOGICAL FROM NETWORK\t-2-" + "\u001B[0m");
 						this.sendToBottomLayer(s_packet);
 					}
 
