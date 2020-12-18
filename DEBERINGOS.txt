@@ -6,7 +6,7 @@ Logical
 	-- Pedir al usuarios la mac destino o hardcodeada y introducir los demas datos --
 	-- Usar semaforo para enviar paquete --
     -- Filtro de paquetes recibidos (CONSTRUCTORES) --
-	Arreglar run
+	-- Arreglar run --
 	-- Recibir y modificar paquetes de capa fisica --
 	-- Enviar paquetes modificados a capa fisica --
 
@@ -22,3 +22,45 @@ COMENTAR
 	Los 2 sleeps estan bien?
 	Al hacer sleep se pierden paquetes, es importante?
 	Queue o ArrayList?
+
+
+-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
+
+
+ARP
+
+Crear programa que permita obtener las direcciones Ethernet asociadas a una IP de la LAN
+Lanzar ARP request y response
+
+[ L2 ]
+Crear funcionalidad para los paquetes que vienen de ARP a L1, los que bajan
+	Escribir MACdst y Ethertype
+	Escribir nuestra MAC en MACsrc
+
+[ L3 ]
+Añadir el parametro a la capa y pedirle al usuario que lo configure
+Imagino que se refiere a la direccion IP
+
+[ Acciones protocolo ARP ]
+Request: Pregunta a los hosts de la LAN quien es el dueño de una IP
+Respone: Responde al dueño de la IP que le ha preguntado
+
+[ ARP en L3 ]
+Crear y lanzar peticiones ARP
+Procesar ARP request y mandar una respuesta si se nos pregunta a nosotros
+Es necesario configurar la tercera capa con su propia IP
+	ARP necesitara esta IP y la direccion Ethernet para crear los paquetes con su informacion
+
+[ Tabla IP-ETHERNET ]
+Guardar todas las relaciones de direcciones en una tabla
+para no tener que buscar la direccion en la LAN
+Hay que actualizar esta tabla cada cierto tiempo, porque puede conectarse alguien nuevo a la red
+
+[ Aplicacion ]
+Implementar la parte del programa que actua como una aplicacion
+
+Pedir al usuario una direcicon IP, que la capa ARP convertira en una direccion Ethernet
+
+ARP layer no puede ser bloqueante
+
+
