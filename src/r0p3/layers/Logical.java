@@ -8,11 +8,15 @@ public class Logical extends Layer {
 	private final 	short 	MAC_LEN = 6;
 	private 		byte[] 	srcMac;
 	private 		byte[] 	dstMac;
+    private         byte[]  broadcast;
 
 	public Logical() {
-		this.srcMac	= new byte[MAC_LEN];
-		this.dstMac	= new byte[MAC_LEN];
-        this.finish = false;
+		this.srcMac	    = new byte[MAC_LEN];
+		this.dstMac	    = new byte[MAC_LEN];
+        this.broadcast  = new byte[]{
+            (byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff
+        };
+        this.finish     = false;
 	}
 
     @Override
@@ -28,16 +32,20 @@ public class Logical extends Layer {
 					System.out.println(s_packet);
 
 					if (s_packet.goUp()) {
-					    if(s_packet.getMac_src() != this.srcMac) {	// Filter for packets send by us
-						    // 4. Modify MAC addresses from the packet
-						    s_packet.setMac_src(this.srcMac);
-						    s_packet.setMac_dst(this.dstMac);
+					    if(s_packet.getMac_src() != this.srcMac && (
+                                s_packet.getMac_dst() == this.srcMac ||
+                                s_packet.getMac_dst() == this.broadcast)) {	// Filter for packets send by us
+					        s_packet.setFakeMacAddress(this.srcMac);	    
 
 						    // 5. Send to Layer 3
 							System.out.println("\u001B[31m" + "SENDING TO NETWORK FROM LOGICAL\t-3-" + "\u001B[0m");
 							this.sendToUpperLayer(s_packet);
 						}
                     } else {
+                        // 4. Modify MAC addresses from the packet
+						s_packet.setMac_src(this.srcMac);
+						s_packet.setMac_dst(this.dstMac);
+                        
                         // Send back to Layer 1
 						System.out.println("\u001B[34m" + "SENDING TO PHYSICAL FROM LOGICAL\t-1-" + "\u001B[0m");
 						this.sendToBottomLayer(s_packet);
@@ -74,9 +82,7 @@ public class Logical extends Layer {
         
         
         //Broadcast for Destination Mac
-        this.dstMac = new byte[]{
-            (byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff
-        };
+        this.dstMac = this.broadcast;
     }
 
 	private boolean isValidMacAddress(String mac_address) {

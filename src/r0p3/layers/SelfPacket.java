@@ -14,6 +14,8 @@ public class SelfPacket {
 	private short 			ether_type;
 	private boolean			up_down;	// true -> true || false -> down
 
+    private byte[]          fake_mac_address;
+
 	
 	public SelfPacket(Packet p) {
 		this.packet 	= p;
@@ -25,6 +27,8 @@ public class SelfPacket {
 		this.ether_type = this.eth_data.frametype;
 
 		this.up_down	= true;
+
+        this.fake_mac_address = new byte[6];
 	}
 
 
@@ -100,4 +104,13 @@ public class SelfPacket {
 	public boolean goUp() {
 		return this.up_down;
 	}
+
+
+    public void setFakeMacAddress(byte[] fma) {
+        this.fake_mac_address = fma;
+    }
+
+    public byte[] getFakeMacAddress() {
+        return this.fake_mac_address;
+    }
 }
