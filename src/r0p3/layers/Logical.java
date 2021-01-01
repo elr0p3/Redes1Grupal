@@ -13,7 +13,7 @@ public class Logical extends Layer {
 	public Logical() {
 		this.srcMac	= new byte[MAC_LEN];
 		this.dstMac	= new byte[MAC_LEN];
-        	this.broadcast	= new byte[]{
+		this.broadcast	= new byte[]{
 			(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff
 		};
 		this.finish	= false;
@@ -32,10 +32,25 @@ public class Logical extends Layer {
 					System.out.println(s_packet);
 
 					if (s_packet.goUp()) {
-						if(s_packet.getMac_src() != this.srcMac && (
-								s_packet.getMac_dst() == this.srcMac ||
-								s_packet.getMac_dst() == this.broadcast)) {	// Filter for packets send by us
-					        	s_packet.setFakeMacAddress(this.srcMac);	    
+							System.out.println("--- UP ---\n"
+								+ macAddressesToString(s_packet) + "\n"
+								+ macAddressesToString(this.srcMac, this.dstMac) + "\n"
+								+ s_packet.getMac_src() + " - " + s_packet.getMac_dst() + "\n"
+								+ this.srcMac + " - " + this.dstMac);
+						//if(s_packet.getMac_src() != this.srcMac /*&& (
+								//s_packet.getMac_dst() == this.srcMac ||
+								//s_packet.getMac_dst() == this.broadcast)*/) {	// Filter for packets send by us
+						if(!byteToStr(s_packet.getMac_src()).equals(byteToStr(this.srcMac)) && (
+									byteToStr(s_packet.getMac_dst()).equals(byteToStr(this.srcMac)) ||
+									byteToStr(s_packet.getMac_dst()).equals(byteToStr(this.broadcast))
+								)) {
+
+							System.out.println("--- IN ---\n"
+								+ macAddressesToString(s_packet) + "\n"
+								+ macAddressesToString(this.srcMac, this.dstMac) + "\n"
+								+ s_packet.getMac_src() + " - " + s_packet.getMac_dst() + "\n"
+								+ this.srcMac + " - " + this.dstMac);
+							s_packet.setFakeMacAddress(this.srcMac);	    
 
 							// 5. Send to Layer 3
 							System.out.println("\u001B[31m" + "SENDING TO NETWORK FROM LOGICAL\t-3-" + "\u001B[0m");
@@ -90,6 +105,33 @@ public class Logical extends Layer {
 			.compile("^([\\dA-Fa-f]{2}[.:-]){5}([\\dA-Fa-f]{2})$")
 			.matcher(mac_address)
 			.find();
+	}
+
+	private String macAddressesToString(SelfPacket p) {
+		String macs = "";
+		for (byte b : p.getMac_src())
+    		macs += Integer.toHexString(b&0xff) + ":";
+		macs += " - ";
+		for (byte b : p.getMac_dst())
+    		macs += Integer.toHexString(b&0xff) + ":";
+		return macs;
+	}
+
+	private String macAddressesToString(byte[] src, byte[] dst) {
+		String macs = "";
+		for (byte b : src)
+    		macs += Integer.toHexString(b&0xff) + ":";
+		macs += " - ";
+		for (byte b : dst)
+    		macs += Integer.toHexString(b&0xff) + ":";
+		return macs;
+	}
+
+	private String byteToStr(byte[] mac) {
+		String macs = "";
+		for (byte b : mac)
+    		macs += Integer.toHexString(b&0xff) + ":";
+		return macs;
 	}
 
 }

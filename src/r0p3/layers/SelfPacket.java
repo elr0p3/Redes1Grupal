@@ -16,6 +16,8 @@ public class SelfPacket {
 
 	private byte[]		fake_mac_address;
 
+	private boolean		scanned_type;
+
 	
 	public SelfPacket(Packet p) {
 		this.packet 	= p;
@@ -29,6 +31,8 @@ public class SelfPacket {
 		this.up_down	= true;
 
 		this.fake_mac_address = new byte[6];
+
+		this.scanned_type = false;
 	}
 
 
@@ -112,5 +116,14 @@ public class SelfPacket {
 
 	public byte[] getFakeMacAddress() {
 		return this.fake_mac_address;
+	}
+
+
+	public void setScanned_type(boolean st) {
+		this.scanned_type = st;
+	}
+
+	public boolean getScanned_type() {
+		return this.scanned_type;
 	}
 }
