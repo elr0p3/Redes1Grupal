@@ -7,7 +7,7 @@ import jpcap.packet.ARPPacket;
 public class Arp extends SelfProtocol {
 
 	public Arp() {
-		this.finish	= false;
+		this.finish = false;
 	}
 
 	@Override
@@ -17,9 +17,9 @@ public class Arp extends SelfProtocol {
 				if (!this.getPacket_list().isEmpty()) {
 					this.lock.acquire();
 
-    				SelfPacket p = getPacketDiscarding();
-    				ARPPacket arpPacket = (ARPPacket) p.getPacket();
-    				System.out.println("ARP Packet recieved -> " + arpPacket.toString());
+					SelfPacket p = getPacketDiscarding();
+					ARPPacket arpPacket = (ARPPacket) p.getPacket();
+					System.out.println("ARP Packet recieved -> " + arpPacket.toString());
 
 					this.lock.release();
 				} else {

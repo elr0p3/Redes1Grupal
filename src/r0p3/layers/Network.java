@@ -8,25 +8,25 @@ import jpcap.packet.EthernetPacket;
 
 public class Network extends Layer {
 
-    private HashMap<String, SelfProtocol> protocols;
+	private HashMap<String, SelfProtocol> protocols;
 
-    public Network() {
-        this.protocols  = new HashMap<String, SelfProtocol>();
-        this.finish     = false;
+	public Network() {
+		this.protocols  = new HashMap<String, SelfProtocol>();
+		this.finish     = false;
 
 		this.protocols.put(SelfProtocol.IP, new Ip());
 		this.protocols.put(SelfProtocol.ARP, new Arp());
-    }
+	}
 
-    @Override
-    public void run() {
+	@Override
+	public void run() {
 		SelfPacket s_packet;
 		short type;
 		
 		this.protocols.get(SelfProtocol.IP).start();
 		this.protocols.get(SelfProtocol.ARP).start();
 
-        while (!this.finish) {
+		while (!this.finish) {
 			try {
 				if (!this.getPacket_list().isEmpty()) {
 					s_packet = this.getPacketDiscarding();
@@ -42,7 +42,7 @@ public class Network extends Layer {
 					s_packet.setgoDown();
 					if (s_packet.goUp()) {
 						// this.sendToUpperLayer(s_packet);
-                    } else {
+					} else {
 						System.out.println("\u001B[32m" + "SENDING TO LOGICAL FROM NETWORK\t-2-" + "\u001B[0m");
 						this.sendToBottomLayer(s_packet);
 					}
@@ -53,16 +53,16 @@ public class Network extends Layer {
 			} catch (InterruptedException err) {
 				System.err.println(err);
 			}
-        }
+		}
 
 		// this.getUp().setFinish(true);
 		this.protocols.get(SelfProtocol.IP).setFinish(true);
 		this.protocols.get(SelfProtocol.ARP).setFinish(true);
-    }
+	}
 
-    @Override
-    public void configuration() {
+	@Override
+	public void configuration() {
 
-    }
+	}
 
 }

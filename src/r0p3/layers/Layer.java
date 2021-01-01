@@ -6,23 +6,23 @@ import java.util.concurrent.Semaphore;
 
 public class Layer extends Thread {
 
-	private     Layer 					up;
-	private     Layer 					down;
+	private     Layer			up;
+	private     Layer			down;
 	private     LinkedList<SelfPacket> 	packet_list;
-	protected   Semaphore 				lock;
-    protected   boolean                 finish;
+	protected   Semaphore			lock;
+	protected   boolean			finish;
 
 
 	public Layer() {
 		packet_list = new LinkedList<SelfPacket>();
-		this.lock	= new Semaphore(1, true);
-        this.finish = false;
+		this.lock   = new Semaphore(1, true);
+		this.finish = false;
 	}
     
-    public void configuration() {}
+	public void configuration() {}
 
-    @Override
-    public void run() {}
+	@Override
+	public void run() {}
 
 	
 	public void appendPacket(SelfPacket packet) {
@@ -60,18 +60,18 @@ public class Layer extends Thread {
 	
 
 	public void sendToUpperLayer(SelfPacket packet) throws InterruptedException {
-    	this.lock.acquire();
-    	this.up.packet_list.add(packet);
-    	this.lock.release();
-    }
+		this.lock.acquire();
+		this.up.packet_list.add(packet);
+		this.lock.release();
+	}
     
-    public void sendToBottomLayer(SelfPacket packet) throws InterruptedException {
-    	this.lock.acquire();
-    	this.down.packet_list.add(packet);
-    	this.lock.release();
-    }
+	public void sendToBottomLayer(SelfPacket packet) throws InterruptedException {
+		this.lock.acquire();
+		this.down.packet_list.add(packet);
+		this.lock.release();
+	}
 
-    // public void setPacket_list(ArrayList<SelfPacket> packet_list) {
+	// public void setPacket_list(ArrayList<SelfPacket> packet_list) {
 		// this.packet_list = packet_list;
 	// }
 

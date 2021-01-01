@@ -7,7 +7,7 @@ import jpcap.packet.IPPacket;
 public class Ip extends SelfProtocol {
 
 	public Ip() {
-		this.finish	= false;
+		this.finish = false;
 	}
 
 	@Override
@@ -17,9 +17,9 @@ public class Ip extends SelfProtocol {
 				if (!this.getPacket_list().isEmpty()) {
 					this.lock.acquire();
 
-    				SelfPacket p = getPacketDiscarding();
-    				IPPacket ipPacket = (IPPacket) p.getPacket();
-    				System.out.println("IP Packet recieved -> " + ipPacket.toString());
+					SelfPacket p = getPacketDiscarding();
+					IPPacket ipPacket = (IPPacket) p.getPacket();
+					System.out.println("IP Packet recieved -> " + ipPacket.toString());
 
 					this.lock.release();
 				} else {

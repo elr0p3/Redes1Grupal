@@ -6,29 +6,29 @@ import jpcap.packet.EthernetPacket;
 
 public class SelfPacket {
 
-	private Packet			packet;
-	private DatalinkPacket 	data_link;
-	private EthernetPacket 	eth_data;
-	private byte[] 			mac_src;
-	private byte[] 			mac_dst;
-	private short 			ether_type;
-	private boolean			up_down;	// true -> true || false -> down
+	private Packet		packet;
+	private DatalinkPacket	data_link;
+	private EthernetPacket	eth_data;
+	private byte[]		mac_src;
+	private byte[]		mac_dst;
+	private short		ether_type;
+	private boolean		up_down;	// true -> true || false -> down
 
-    private byte[]          fake_mac_address;
+	private byte[]		fake_mac_address;
 
 	
 	public SelfPacket(Packet p) {
 		this.packet 	= p;
 		this.data_link 	= p.datalink;
 		this.eth_data 	= (EthernetPacket)p.datalink;
-
+		
 		this.mac_src 	= this.eth_data.src_mac;
 		this.mac_dst 	= this.eth_data.dst_mac;
 		this.ether_type = this.eth_data.frametype;
-
+		
 		this.up_down	= true;
 
-        this.fake_mac_address = new byte[6];
+		this.fake_mac_address = new byte[6];
 	}
 
 
@@ -106,11 +106,11 @@ public class SelfPacket {
 	}
 
 
-    public void setFakeMacAddress(byte[] fma) {
-        this.fake_mac_address = fma;
-    }
+	public void setFakeMacAddress(byte[] fma) {
+		this.fake_mac_address = fma;
+	}
 
-    public byte[] getFakeMacAddress() {
-        return this.fake_mac_address;
-    }
+	public byte[] getFakeMacAddress() {
+		return this.fake_mac_address;
+	}
 }
