@@ -64,3 +64,8 @@ Pedir al usuario una direcicon IP, que la capa ARP convertira en una direccion E
 ARP layer no puede ser bloqueante
 
 
+
+--- QUEDA ---
+pedir varias veces la ip destino
+mandar arp requests a esa ip
+comprobar que todo funcione

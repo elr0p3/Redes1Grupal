@@ -3,6 +3,8 @@ package r0p3.layers;
 import r0p3.protocols.*;
 
 import java.util.HashMap;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import jpcap.packet.EthernetPacket;
 
@@ -42,6 +44,7 @@ public class Network extends Layer {
 						} else {
 							System.out.println("\u001B[31m" + " -  -  NONE  -   -" + "\u001B[0m");
 						}
+						continue;
 					}
 
 					s_packet.setgoDown();
@@ -67,7 +70,33 @@ public class Network extends Layer {
 
 	@Override
 	public void configuration() {
+		Scanner scan = new Scanner(System.in);
+        String ip_address;
+		String[] ip_splited;
+		short 	IP_LEN = 4;
+		byte[]  IPFinal = new byte[IP_LEN];
+        
+		do {
+        	System.out.print("Write source IP Address: ");
+            System.out.flush();
+            ip_address = scan.nextLine();
+			if (!this.isValidIPAddress(ip_address))
+				System.err.println("ERROR! Not valid IP address");
+		} while(!this.isValidIPAddress(ip_address));
+        
+		ip_splited = ip_address.split("\\.");
 
+		for (int i = 0; i < IP_LEN; i++)
+			IPFinal[i] = (byte) Integer.parseInt(ip_splited[i]);
+	}
+
+
+	//Checker para que la ip sea valida
+	private boolean isValidIPAddress(String ip_address) {
+		return Pattern
+				.compile("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
+				.matcher(ip_address)
+				.find();
 	}
 
 }
