@@ -34,8 +34,8 @@ public class Physical extends Layer {
 				// 1. Recieve new packet from medium
 				Packet pckt = captor.getPacket();
 				if (pckt != null) {
-					System.out.println("\u001B[36m" + " -- RECIEVE -> " + this.macAddressesToString(pckt) + "\u001B[0m");
-					System.out.println("\u001B[33m" + "SENDING TO LOGICAL FROM PHYSICAL\t-2-" + "\u001B[0m");
+					// System.out.println("\u001B[36m" + " -- RECIEVE -> " + this.macAddressesToString(pckt) + "\u001B[0m");
+					// System.out.println("\u001B[33m" + "SENDING TO LOGICAL FROM PHYSICAL\t-2-" + "\u001B[0m");
 					// 2. Pass packet to Layer 2
 					this.sendToUpperLayer(new SelfPacket(pckt));
 					// Thread.sleep(50);
@@ -46,7 +46,7 @@ public class Physical extends Layer {
 
 			// 6. Check if there is anything in the list
 			if (!this.getPacket_list().isEmpty()) {
-				System.out.println("\u001B[35m" + "PHYSICAL LIST PCKT\t~" + this.getPacket_list().size() + "~" + "\u001B[0m");
+				// System.out.println("\u001B[35m" + "PHYSICAL LIST PCKT\t~" + this.getPacket_list().size() + "~" + "\u001B[0m");
 				// 7. Send Packet to medium
 				try {
 					Packet pckt_send = this.getPacketDiscarding().getPacket();
@@ -54,7 +54,7 @@ public class Physical extends Layer {
 				} catch (Exception err) {
 					System.err.println("ERROR SENDING PACKET TO MEDIUM:\n" + err);
 				}
-				System.out.println("--- SENDED ---");
+				// System.out.println("--- SENDED ---");
 			}
 		}
 
@@ -104,7 +104,7 @@ public class Physical extends Layer {
 	public void sendPackage(Packet p) throws IOException {
 		JpcapSender sender = JpcapSender.openDevice(this.selectInterface);
 		
-		System.out.println("\u001B[36m" + " -- SEND -> " + this.macAddressesToString(p) + "\u001B[0m");
+		// System.out.println("\u001B[36m" + " -- SEND -> " + this.macAddressesToString(p) + "\u001B[0m");
 		
 		sender.sendPacket(p);
 		sender.close();

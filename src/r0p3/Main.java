@@ -1,8 +1,9 @@
 package r0p3;
 
 import r0p3.layers.*;
-// import r0p3.protocols.*;
+import r0p3.protocols.*;
 
+import java.util.Scanner;
 import java.util.Set;
 
 public class Main {
@@ -13,10 +14,12 @@ public class Main {
 		// System.out.println(System.getProperty("java.library.path"));
 		
 		try {
-			Layer l1, l2, l3;
-			l1 = new Physical();
-			l2 = new Logical();
-			l3 = new Network();
+			Physical l1	= new Physical();
+			Logical l2	= new Logical();
+			Network l3	= new Network();
+
+			Arp arp	= new Arp(l3);
+			Ip ip	= new Ip(l3);
 		
 			// -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 			l1.setUp(l2);
@@ -25,6 +28,7 @@ public class Main {
 			l2.setUp(l3);
 		
 			l3.setDown(l2);
+			l3.setProtocols(arp, ip);
 			// l3.setUp(l4);
 		
 			// l4.setDown(l3);
@@ -51,7 +55,9 @@ public class Main {
 			// while(l2.isAlive()){Thread.sleep(1);}
 			// System.out.println("SAMATAOPACO");
 		
-			Thread.sleep(5000);
+			menu(arp);
+
+			// Thread.sleep(5000);
 			l1.setFinish(true);
 		
 			Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
@@ -60,5 +66,36 @@ public class Main {
 		} catch (Exception err) {}
 
     }
+
+	public static void menu(Arp arp) {
+        System.out.println("Welcome to Covid Apocalipsis");
+
+        Scanner sn = new Scanner(System.in);
+		boolean exit = false;
+        int option; //Guardaremos la opcion del usuario
+
+		while (!exit) {
+			System.out.println("1. Check MAC");
+			System.out.println("2. Exit");
+
+			System.out.print("Select the option with a value: ");
+			System.out.flush();
+			option = sn.nextInt();
+
+			switch (option) {
+				case 1:
+					System.out.println("Let's check this mac");
+					// Meter Toda la funcion de arpRequest
+					// send arp request
+					break;
+				case 2:
+					System.out.println("A por papel higienico");
+					exit = true;
+					break;
+				default:
+					System.out.println("Number out of range");
+			}
+		}
+	}
 
 }

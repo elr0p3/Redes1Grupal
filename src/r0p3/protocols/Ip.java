@@ -23,7 +23,7 @@ public class Ip extends SelfProtocol {
 
 					SelfPacket p = this.getPacketDiscarding();
 					IPPacket ipPacket = (IPPacket) p.getPacket();
-					System.out.println("IP Packet recieved -> " + ipPacket.toString());
+					// System.out.println("IP Packet recieved -> " + ipPacket.toString());
 
 					this.lock.release();
 				} else {

@@ -15,6 +15,7 @@ public class SelfPacket {
 	private boolean		up_down;	// true -> true || false -> down
 
 	private byte[]		fake_mac_address;
+	private short		fake_eth_type;
 
 	private boolean		scanned_type;
 
@@ -30,7 +31,8 @@ public class SelfPacket {
 		
 		this.up_down	= true;
 
-		this.fake_mac_address = new byte[6];
+		this.fake_mac_address 	= new byte[6];
+		this.fake_eth_type		= EthernetPacket.ETHERTYPE_IP;
 
 		this.scanned_type = false;
 	}
@@ -116,6 +118,14 @@ public class SelfPacket {
 
 	public byte[] getFakeMacAddress() {
 		return this.fake_mac_address;
+	}
+
+	public void setFakeEthType(short fe) {
+		this.fake_eth_type = fe;
+	}
+
+	public short getFakeEthType() {
+		return this.fake_eth_type;
 	}
 
 
