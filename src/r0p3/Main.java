@@ -40,7 +40,7 @@ public class Main {
 			// -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 			l1.configuration();
 			l2.configuration();
-			// l3.configuration();
+			l3.configuration();
 			// l4.configuration();
 			// l5.configuration();
 		
@@ -87,6 +87,7 @@ public class Main {
 					System.out.println("Let's check this mac");
 					// Meter Toda la funcion de arpRequest
 					// send arp request
+					arp.requestIP();
 					break;
 				case 2:
 					System.out.println("A por papel higienico");

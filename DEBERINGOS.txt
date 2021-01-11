@@ -69,3 +69,6 @@ ARP layer no puede ser bloqueante
 pedir varias veces la ip destino
 mandar arp requests a esa ip
 comprobar que todo funcione
+
+--- --- ---
+Semaforo constructor SelfPacket???

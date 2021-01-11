@@ -11,6 +11,7 @@ public class Layer extends Thread {
 	private     LinkedList<SelfPacket> 	packet_list;
 	protected   Semaphore			lock;
 	protected   boolean			finish;
+	// public static final byte[] IP_ADDRESS;
 
 
 	public Layer() {
