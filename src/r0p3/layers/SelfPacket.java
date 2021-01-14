@@ -12,7 +12,7 @@ public class SelfPacket {
 	private byte[]		mac_src;
 	private byte[]		mac_dst;
 	private short		ether_type;
-	private boolean		up_down;	// true -> true || false -> down
+	private boolean		up_down;	// true -> up || false -> down
 
 	private byte[]		fake_mac_address;
 	private short		fake_eth_type;
@@ -23,11 +23,16 @@ public class SelfPacket {
 	public SelfPacket(Packet p) {
 		this.packet 	= p;
 		this.data_link 	= p.datalink;
-		this.eth_data 	= (EthernetPacket)p.datalink;
+
+		if (this.data_link != null) {
+			this.eth_data 	= (EthernetPacket)p.datalink;
+			this.mac_src 	= this.eth_data.src_mac;
+			this.mac_dst 	= this.eth_data.dst_mac;
+			this.ether_type = this.eth_data.frametype;
+		} else {
+			this.eth_data	= new EthernetPacket();
+		}
 		
-		this.mac_src 	= this.eth_data.src_mac;
-		this.mac_dst 	= this.eth_data.dst_mac;
-		this.ether_type = this.eth_data.frametype;
 		
 		this.up_down	= true;
 

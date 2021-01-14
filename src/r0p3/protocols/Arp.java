@@ -84,34 +84,31 @@ public class Arp extends SelfProtocol {
 		//if(si el dato no esta en la tabla)
 
 		System.out.println("MARIKONG 2.1.0");
-		if (!this.directions.containsKey(ip_address)) {
 
-			System.out.println("MARIKONG 2.1.1");
-			ARPPacket a = new ARPPacket();
-			System.out.println("MARIKONG 2.1.2");
-			a.operation = ARPPacket.ARP_REQUEST;
-			System.out.println("MARIKONG 2.1.3");
-			a.hardtype = ARPPacket.HARDTYPE_ETHER;
-			System.out.println("MARIKONG 2.1.4");
-			a.prototype = ARPPacket.PROTOTYPE_IP;
-			System.out.println("MARIKONG 2.1.5");
-			a.hlen = 6;
-			System.out.println("MARIKONG 2.1.6");
-			a.plen = 4;
-			System.out.println("MARIKONG 2.1.7");
-			a.sender_hardaddr = Logical.srcMac; //MAC source
-			System.out.println("MARIKONG 2.1.8");
-			a.sender_protoaddr = Network.ip_address; //IP source
-			System.out.println("MARIKONG 2.1.9");
-			a.target_hardaddr = new byte[]{(byte)0x00,(byte)0x00}; //zeros  //MAC destination
-			System.out.println("MARIKONG 2.1.10");
+		System.out.println("MARIKONG 2.1.1");
+		ARPPacket a = new ARPPacket();
+		System.out.println("MARIKONG 2.1.2");
+		a.operation = ARPPacket.ARP_REQUEST;
+		System.out.println("MARIKONG 2.1.3");
+		a.hardtype = ARPPacket.HARDTYPE_ETHER;
+		System.out.println("MARIKONG 2.1.4");
+		a.prototype = ARPPacket.PROTOTYPE_IP;
+		System.out.println("MARIKONG 2.1.5");
+		a.hlen = 6;
+		System.out.println("MARIKONG 2.1.6");
+		a.plen = 4;
+		System.out.println("MARIKONG 2.1.7");
+		a.sender_hardaddr = Logical.srcMac; //MAC source
+		System.out.println("MARIKONG 2.1.8");
+		a.sender_protoaddr = Network.ip_address; //IP source
+		System.out.println("MARIKONG 2.1.9");
+		a.target_hardaddr = new byte[]{(byte)0x00,(byte)0x00}; //zeros  //MAC destination
+		System.out.println("MARIKONG 2.1.10");
 
-			a.target_protoaddr = ip_address; //Consola IP dest
-			System.out.println("MARIKONG 2.1.11");
+		a.target_protoaddr = ip_address; //Consola IP dest
+		System.out.println("MARIKONG 2.1.11");
 
-			return a;
-		}
-		return null;
+		return a;
 
 	}
 
@@ -175,21 +172,26 @@ public class Arp extends SelfProtocol {
 			for (int i = 0; i < IP_LEN; i++)
 				IPFinal[i] = (byte) Integer.parseInt(ip_splited[i]);
 
-			System.out.println("MARIKONG 2");
-			ARPPacket send_arp = this.arpRequest(IPFinal);
-			if (send_arp != null) {
-				System.out.println("MARIKONG 2.1");
-				SelfPacket return_sp = new SelfPacket((Packet)send_arp);
-				System.out.println("MARIKONG 2.2");
-				return_sp.setScanned_type(true);
-				System.out.println("MARIKONG 2.3");
-				return_sp.setFakeEthType(EthernetPacket.ETHERTYPE_ARP);
-				System.out.println("MARIKONG 2.4");
-				this.network_l.appendPacket(return_sp);
-				System.out.println("MARIKONG 2.5");
+			if (!this.directions.containsKey(IPFinal)) {
+				System.out.println("MARIKONG 2");
+				ARPPacket send_arp = this.arpRequest(IPFinal);
+				if (send_arp != null) {
+					System.out.println("MARIKONG 2.1");
+					SelfPacket return_sp = new SelfPacket(send_arp);
+					System.out.println("MARIKONG 2.2");
+					return_sp.setScanned_type(true);
+					System.out.println("MARIKONG 2.3");
+					return_sp.setFakeEthType(EthernetPacket.ETHERTYPE_ARP);
+					System.out.println("MARIKONG 2.4");
+					this.network_l.appendPacket(return_sp);
+					System.out.println("MARIKONG 2.5");
+				}
+				System.out.println("MARIKONG 3");
+			} else {
+				System.out.println("This address is already stored");
 			}
-			System.out.println("MARIKONG 3");
 
+		
 			this.lock.release();
 		} catch (InterruptedException err) {}
 		System.out.println("MARIKONG 4");

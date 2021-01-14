@@ -3,6 +3,8 @@ package r0p3.layers;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import jpcap.packet.EthernetPacket;
+
 // import jpcap.packet.EthernetPacket;
 
 public class Logical extends Layer {
@@ -50,7 +52,13 @@ public class Logical extends Layer {
 						// 4. Modify MAC addresses from the packet
 						s_packet.setMac_src(this.srcMac);
 						s_packet.setMac_dst(this.dstMac);
-						s_packet.setEther_type(s_packet.getFakeEthType());
+						//s_packet.setEther_type(s_packet.getFakeEthType());
+						if (s_packet.getFakeEthType() == EthernetPacket.ETHERTYPE_IP)
+							s_packet.setEther_type(EthernetPacket.ETHERTYPE_IP);
+						else if (s_packet.getFakeEthType() == EthernetPacket.ETHERTYPE_ARP) {
+							System.out.println("EEEEEEEEEEEE " + macAddressesToString(s_packet));
+							s_packet.setEther_type(EthernetPacket.ETHERTYPE_ARP);
+						}
 
 						// Send back to Layer 1
 						// System.out.println("\u001B[34m" + "SENDING TO PHYSICAL FROM LOGICAL\t-1-" + "\u001B[0m");

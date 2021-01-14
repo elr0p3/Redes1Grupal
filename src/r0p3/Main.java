@@ -63,7 +63,9 @@ public class Main {
 			Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
 			for(Thread t : threadSet)
 				System.out.println("THREAD -- " + t);
-		} catch (Exception err) {}
+		} catch (Exception err) {
+			err.printStackTrace();
+		}
 
     }
 
