@@ -35,6 +35,9 @@ public class Logical extends Layer {
 					s_packet = this.getPacketDiscarding();
 					// System.out.println(s_packet);
 
+					if (s_packet == null)
+						continue;
+
 					if (s_packet.goUp()) {
 							if (macAddressesFilter(s_packet)) {
 							// System.out.println("--- IN ---\n"
@@ -56,7 +59,6 @@ public class Logical extends Layer {
 						if (s_packet.getFakeEthType() == EthernetPacket.ETHERTYPE_IP)
 							s_packet.setEther_type(EthernetPacket.ETHERTYPE_IP);
 						else if (s_packet.getFakeEthType() == EthernetPacket.ETHERTYPE_ARP) {
-							System.out.println("EEEEEEEEEEEE " + macAddressesToString(s_packet));
 							s_packet.setEther_type(EthernetPacket.ETHERTYPE_ARP);
 						}
 
@@ -68,7 +70,9 @@ public class Logical extends Layer {
 					Thread.sleep(1);
 				}
 			} catch (Exception err) {
-				System.err.println("ERROR!\n" + err);
+				System.err.println("ERROR Layer 2!");
+				err.printStackTrace();
+				System.err.println();
 			}
 		}
 

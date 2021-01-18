@@ -17,12 +17,12 @@ import jpcap.packet.EthernetPacket;
 public class Arp extends SelfProtocol {
 
 	//IP&MAC
-	private HashMap<byte[], byte[]> directions;
+	private HashMap<String, String> directions;
 
 	private Network network_l;
 
 	public Arp(Network n) {
-		this.directions = new HashMap<byte[], byte[]>();
+		this.directions = new HashMap<String, String>();
 		this.network_l = n;
 		this.finish	= false;
 	}
@@ -39,7 +39,8 @@ public class Arp extends SelfProtocol {
 					ARPPacket arpPacket = new ARPPacket();
 
 					//if packet.macDestination == 0x00,0x00 y opCode sea de request
-					if(packetConverted.target_hardaddr == new byte[]{(byte)0x00,(byte)0x00} && packetConverted.operation == ARPPacket.ARP_REQUEST) {
+					if(packetConverted.target_hardaddr == new byte[]{(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00} &&
+							packetConverted.operation == ARPPacket.ARP_REQUEST) {
 						arpPacket = this.arpReply(packetConverted, p); //devolvemos un arpReply
 
 						SelfPacket return_sp = new SelfPacket((Packet)arpPacket);
@@ -49,8 +50,12 @@ public class Arp extends SelfProtocol {
 					}//esto tendra que ser un elseif pero el opcode debe ser request
 					else if(packetConverted.operation == ARPPacket.ARP_REPLY) {
 						//meter dato en la tabla
-						if (!this.directions.containsKey(packetConverted.sender_protoaddr)) {
-							this.directions.put(packetConverted.sender_protoaddr, packetConverted.sender_hardaddr);
+
+						String sender_protoaddr = this.byteToStr(packetConverted.sender_protoaddr);
+						if (!this.directions.containsKey(sender_protoaddr)) {
+
+							String sender_hardaddr = this.byteToStr(packetConverted.sender_hardaddr);
+							this.directions.put(sender_protoaddr, sender_hardaddr);
 
 						} /*else if (this.directions.containsKey(packetConverted.sender_protoaddr)
 								&& !this.directions.get(packetConverted.sender_protoaddr).equals(packetConverted.sender_hardaddr)) {
@@ -65,7 +70,9 @@ public class Arp extends SelfProtocol {
 					Thread.sleep(1);
 				}
 			} catch(InterruptedException err) {
-				System.err.println(err);
+				System.err.println("ERROR in ARP!");
+				err.printStackTrace();
+				System.err.println();
 			}
 		}
 	}
@@ -83,30 +90,17 @@ public class Arp extends SelfProtocol {
 		//debemos crear una tabla con los datos de la mac  y Ip para no enviar una request si ya tenemos dicha mac	
 		//if(si el dato no esta en la tabla)
 
-		System.out.println("MARIKONG 2.1.0");
-
-		System.out.println("MARIKONG 2.1.1");
 		ARPPacket a = new ARPPacket();
-		System.out.println("MARIKONG 2.1.2");
 		a.operation = ARPPacket.ARP_REQUEST;
-		System.out.println("MARIKONG 2.1.3");
 		a.hardtype = ARPPacket.HARDTYPE_ETHER;
-		System.out.println("MARIKONG 2.1.4");
 		a.prototype = ARPPacket.PROTOTYPE_IP;
-		System.out.println("MARIKONG 2.1.5");
 		a.hlen = 6;
-		System.out.println("MARIKONG 2.1.6");
 		a.plen = 4;
-		System.out.println("MARIKONG 2.1.7");
 		a.sender_hardaddr = Logical.srcMac; //MAC source
-		System.out.println("MARIKONG 2.1.8");
 		a.sender_protoaddr = Network.ip_address; //IP source
-		System.out.println("MARIKONG 2.1.9");
-		a.target_hardaddr = new byte[]{(byte)0x00,(byte)0x00}; //zeros  //MAC destination
-		System.out.println("MARIKONG 2.1.10");
+		a.target_hardaddr = new byte[]{(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x00}; //zeros  //MAC destination
 
 		a.target_protoaddr = ip_address; //Consola IP dest
-		System.out.println("MARIKONG 2.1.11");
 
 		return a;
 
@@ -119,6 +113,7 @@ public class Arp extends SelfProtocol {
 
 		//replyARP deberemos de cambiar los att de target y sender al contrario para enviarlo de vuelta y cambiar la mac source para que no sea 0x00
 
+		System.out.println("REPLYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
 		ARPPacket a = new ARPPacket();
 		a.operation = ARPPacket.ARP_REPLY;
 		a.hardtype = packetConverted.hardtype;
@@ -136,16 +131,6 @@ public class Arp extends SelfProtocol {
 
 
 	}
-
-	//Comprobar que este en la tabla la mac con la ip pedida
-	// public boolean checkTable(byte [] ip) {
-		
-		// if(directions.containsValue(ip))
-			// return true;
-		// else
-			// return false;
-		
-	// }
 
 	//Usuario inserta IP por consola
 	public void requestIP() {
@@ -167,34 +152,30 @@ public class Arp extends SelfProtocol {
 			} while(!this.isValidIPAddress(ip_address));
 
 			ip_splited = ip_address.split("\\.");
-			System.out.println("MARIKONG 1");
 
 			for (int i = 0; i < IP_LEN; i++)
 				IPFinal[i] = (byte) Integer.parseInt(ip_splited[i]);
 
-			if (!this.directions.containsKey(IPFinal)) {
-				System.out.println("MARIKONG 2");
+			String ipfinal_str = byteToStr(IPFinal);
+			if (!this.directions.containsKey(ipfinal_str)) {
 				ARPPacket send_arp = this.arpRequest(IPFinal);
 				if (send_arp != null) {
-					System.out.println("MARIKONG 2.1");
 					SelfPacket return_sp = new SelfPacket(send_arp);
-					System.out.println("MARIKONG 2.2");
 					return_sp.setScanned_type(true);
-					System.out.println("MARIKONG 2.3");
 					return_sp.setFakeEthType(EthernetPacket.ETHERTYPE_ARP);
-					System.out.println("MARIKONG 2.4");
 					this.network_l.appendPacket(return_sp);
-					System.out.println("MARIKONG 2.5");
 				}
-				System.out.println("MARIKONG 3");
 			} else {
 				System.out.println("This address is already stored");
 			}
 
 		
 			this.lock.release();
-		} catch (InterruptedException err) {}
-		System.out.println("MARIKONG 4");
+		} catch (InterruptedException err) {
+			System.err.println("ERROR requestIP");
+			err.printStackTrace();
+			System.err.println();
+		}
 	}
 
 	//Checker para que la ip sea valida
@@ -205,7 +186,13 @@ public class Arp extends SelfProtocol {
 				.find();
 	}
 
+	
 
-
+	private String byteToStr(byte[] mac) {
+		String macs = "";
+		for (byte b : mac)
+    		macs += Integer.toHexString(b&0xff) + ":";
+		return macs;
+	}
 
 }

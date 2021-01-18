@@ -30,7 +30,9 @@ public class Ip extends SelfProtocol {
 					Thread.sleep(1);
 				}
 			} catch(InterruptedException err) {
-				System.err.println(err);
+				System.err.println("ERROR in IP");
+				err.printStackTrace();
+				System.err.println();
 			}
 		}
 	}

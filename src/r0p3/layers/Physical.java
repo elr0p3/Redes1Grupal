@@ -41,7 +41,9 @@ public class Physical extends Layer {
 					// Thread.sleep(50);
 				}
 			} catch (Exception err) {
-				System.err.println("ERROR PASSING PACKET TO LAYER 2:\n" + err);
+				System.err.println("ERROR PASSING PACKET TO LAYER 2:");
+				err.printStackTrace();
+				System.err.println();
 			}
 
 			// 6. Check if there is anything in the list
@@ -52,7 +54,9 @@ public class Physical extends Layer {
 					Packet pckt_send = this.getPacketDiscarding().getPacket();
 					this.sendPackage(pckt_send);
 				} catch (Exception err) {
-					System.err.println("ERROR SENDING PACKET TO MEDIUM:\n" + err);
+					System.err.println("ERROR SENDING PACKET TO MEDIUM:");
+					err.printStackTrace();
+					System.err.println();
 				}
 				// System.out.println("--- SENDED ---");
 			}
@@ -96,7 +100,9 @@ public class Physical extends Layer {
 				caputure_timeout
 			);
 		} catch (IOException err) {
-			System.err.println("ERROR! Can't open the device\n" + err);
+			System.err.println("ERROR! Can't open the device");
+			err.printStackTrace();
+			System.err.println();
 		}
 	}
 

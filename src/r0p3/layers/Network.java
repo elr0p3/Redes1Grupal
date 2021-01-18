@@ -65,7 +65,9 @@ public class Network extends Layer {
 					Thread.sleep(1);
 				}
 			} catch (InterruptedException err) {
-				System.err.println(err);
+				System.err.println("ERROR Layer 3!");
+				err.printStackTrace();
+				System.err.println();
 			}
 		}
 

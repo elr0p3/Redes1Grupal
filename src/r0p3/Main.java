@@ -64,7 +64,9 @@ public class Main {
 			for(Thread t : threadSet)
 				System.out.println("THREAD -- " + t);
 		} catch (Exception err) {
+			System.err.println("ERROR in MAIN");
 			err.printStackTrace();
+			System.err.println();
 		}
 
     }
